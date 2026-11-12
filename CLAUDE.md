@@ -37,7 +37,7 @@ decisions:       docs/adr/
 progress:        docs/PROGRESS.md
 ```
 
-- `BD-00-overview.md` was written while the tool was still called `wtx`. Read `wtx` as `githive`, `wtx.*` as `githive.*`, `WTX_*` as `GITHIVE_*`, and the old command names as in the §4 table (see "Naming" in `docs/basic-design/README.md`).
+- `BD-00-overview.md` uses the official GitHive names since revision 2 (P01c); the original `wtx` draft is kept only in git history.
 - If a design document and an ADR conflict, the newest Approved ADR wins.
 
 **Format rules:**
