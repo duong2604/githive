@@ -38,7 +38,7 @@ progress:        docs/PROGRESS.md
 ```
 
 - `BD-00-overview.md` was written while the tool was still called `wtx`. Read `wtx` as `githive`, `wtx.*` as `githive.*`, `WTX_*` as `GITHIVE_*`, and the old command names as in the §4 table (see "Naming" in `docs/basic-design/README.md`).
-- If a design document and an ADR conflict, the newest accepted ADR wins.
+- If a design document and an ADR conflict, the newest Approved ADR wins.
 
 **Format rules:**
 - `docs/` contains only Markdown following `docs/templates/` (images, if any, as `.png`/`.svg` in `docs/assets/`; prefer Mermaid diagrams).
@@ -139,12 +139,12 @@ Rules:
 
 ## 8. Changing the design (ADRs)
 
-Write `docs/adr/NNNN-short-title.md` (Context / Decision / Consequences / Status: Proposed) when you want to:
-- deviate from `docs/basic-design/BD-00-overview.md` (or an approved BD/DD) or an accepted ADR;
+Write `docs/adr/NNNN-short-title.md` (Context / Decision / Consequences / status: In review) when you want to:
+- deviate from `docs/basic-design/BD-00-overview.md` (or an approved BD/DD) or an Approved ADR;
 - change the command surface, flags, exit codes, JSON schema, or config keys;
 - add a dependency outside the default list.
 
-Open the ADR in its own PR and tell Danny in Vietnamese what you propose and why. He'll take it to the advisor. Don't build on a Proposed ADR until it's Accepted.
+Open the ADR in its own PR and tell Danny in Vietnamese what you propose and why. He'll take it to the advisor. Don't build on an ADR until it is Approved.
 
 ## 9. Ask Danny first
 

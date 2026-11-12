@@ -1,11 +1,11 @@
 ---
 id: ADR-xxxx
 title:
-status: Draft            # Draft | In review | Approved | Superseded
+status: Draft            # Draft | In review | Approved | Superseded | Rejected (Rejected: ADR only)
 req: []
 depends_on: []
 owner:
-last_updated: DD-MM-YYYY
+last_updated: YYYY-MM-DD
 ---
 
 # ADR-xxxx — <decision title>
@@ -23,4 +23,4 @@ last_updated: DD-MM-YYYY
 <!-- What becomes easier or harder, and any follow-up work (docs, code, migrations). -->
 
 ## Status
-<!-- Current status and history, e.g. "Draft (dd-mm-yyyy) → Approved by Danny (dd-mm-yyyy)"; name the ADR that supersedes it, if any. -->
+<!-- Current status and history, e.g. "Draft (YYYY-MM-DD) → Approved by Danny (YYYY-MM-DD)"; name the ADR that supersedes it, if any. -->

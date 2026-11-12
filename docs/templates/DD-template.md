@@ -5,7 +5,7 @@ status: Draft            # Draft | In review | Approved | Superseded
 req: [REQ-xx, NFR-xx]
 depends_on: []
 owner:
-last_updated: DD-MM-YYYY
+last_updated: YYYY-MM-DD
 ---
 
 # DD-xx — <feature name>

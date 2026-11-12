@@ -5,7 +5,7 @@ status: Approved
 req: []
 depends_on: []
 owner: Danny (duong2604)
-last_updated: 13-11-2026
+last_updated: 2026-11-13
 ---
 
 # Progress
@@ -18,14 +18,14 @@ Phase 1 — Documentation baseline. Step 1 is done; next are 2a (bootstrap) and 
 
 | Step | Owner | Status | Output | Date |
 | --- | --- | --- | --- | --- |
-| 1 Normalize documentation structure | Agent | Done | [PR #1](https://github.com/duong2604/githive/pull/1) | 13-11-2026 |
+| 1 Normalize documentation structure | Agent | Done | [PR #1](https://github.com/duong2604/githive/pull/1) | 2026-11-13 |
 | 2a Bootstrap project (KICKOFF B, steps 0–2) | Agent | Not started | | |
 | 2b BD-00, BD-03 → DD-00, DD-03 approved | Advisor + Danny | Not started | | |
 | 3 Issues + implementation for DD-00, DD-03 | Agent | Not started | | |
 
 Prompts for each step: [`docs/prompts/NEXT_STEPS_PROMPTS.md`](prompts/NEXT_STEPS_PROMPTS.md).
 
-## Review findings (13-11-2026)
+## Review findings (2026-11-13)
 
 | # | Finding | Status | Resolution |
 | --- | --- | --- | --- |
@@ -42,5 +42,5 @@ Prompts for each step: [`docs/prompts/NEXT_STEPS_PROMPTS.md`](prompts/NEXT_STEPS
 
 | Date | Work | PR | OS verified |
 | --- | --- | --- | --- |
-| 13-11-2026 | Normalized docs structure: kebab-case folders, requirements and BD index in Markdown, templates, docs-check tool, README encoding, CLAUDE.md and kickoff prompt updated | [#1](https://github.com/duong2604/githive/pull/1) | Windows 11 (Git Bash, Go 1.26.5) |
-| 13-11-2026 | PR #1 merged into main (merge commit ee1bf78); branch deleted. Step 1 marked Done | — | Windows 11 |
+| 2026-11-13 | Normalized docs structure: kebab-case folders, requirements and BD index in Markdown, templates, docs-check tool, README encoding, CLAUDE.md and kickoff prompt updated | [#1](https://github.com/duong2604/githive/pull/1) | Windows 11 (Git Bash, Go 1.26.5) |
+| 2026-11-13 | PR #1 merged into main (merge commit ee1bf78); branch deleted. Step 1 marked Done | — | Windows 11 |

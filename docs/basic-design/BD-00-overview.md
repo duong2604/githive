@@ -5,7 +5,7 @@ status: Approved
 req: [NFR-01, NFR-02, NFR-05]
 depends_on: []
 owner: Danny (duong2604)
-last_updated: 12-11-2026
+last_updated: 2026-11-12
 ---
 
 # wtx — Basic Design: CLI quản lý Git Worktree cho nhiều Claude agent

@@ -5,7 +5,7 @@ status: Approved
 req: []
 depends_on: []
 owner: Danny (duong2604)
-last_updated: 13-11-2026
+last_updated: 2026-11-13
 ---
 
 # Requirements — CLI Tool For Worktree

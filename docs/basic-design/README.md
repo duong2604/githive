@@ -5,7 +5,7 @@ status: Approved
 req: []
 depends_on: []
 owner: Danny (duong2604)
-last_updated: 13-11-2026
+last_updated: 2026-11-13
 ---
 
 # Basic design index
@@ -34,9 +34,9 @@ REQ mapping comes from the Traceability table in [`docs/requirements/README.md`]
 - Each feature has one BD/DD pair with the same number (BD-04 ↔ DD-04). Issues and PRs name the DD they implement.
 - Traceability chain: REQ → BD-xx → DD-xx → issue → PR.
 - **Code is written only from a DD whose status is Approved.**
-- Status flow in this table: Not started → Draft → In review → Approved (→ Superseded).
+- Status flow in this table: Not started → Draft → In review → Approved (→ Superseded). Document status values: Draft | In review | Approved | Superseded, plus Rejected for ADRs only (P01b-D1).
 - File names: `BD-xx-<slug>.md` in `docs/basic-design/`, `DD-xx-<slug>.md` in `docs/detail-design/`. Each file starts from [`docs/templates/`](../templates/) and opens with the YAML front matter block (id, title, status, req, depends_on, owner, last_updated).
-- Dates in documents use `dd-mm-yyyy`.
+- Dates use ISO 8601 `YYYY-MM-DD` everywhere (P01b-D5).
 
 ## Naming
 
