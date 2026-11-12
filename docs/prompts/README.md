@@ -31,6 +31,8 @@ Mỗi phiên Claude Code chạy đúng một prompt. Các prompt dưới đây d
 - **Mã làm rõ requirement:** `CL-xx`, đánh số liên tục trên toàn dự án. Nội dung ghi trong `docs/requirements/README.md`, kèm ID prompt đã chốt nó.
 - **Trạng thái prompt:** `Ready` → `Running` → `Done`; `Superseded` khi bị prompt khác thay thế.
 - **Prompt đã chạy thì không sửa nội dung.** Muốn thay đổi thì tạo prompt mới với chữ cái kế tiếp.
+- **`Done` nghĩa là phiên đã chạy xong (P02-D1).** PR đã merge hay chưa thì xem cột Nhánh / PR (`(in review)` hoặc `(merged)`); không thêm trạng thái mới.
+- **Sửa prompt đã chạy (P02-D2):** chỉ được sửa `status`, `branch` và `pr` trong front matter; nội dung giữ nguyên.
 - **Vai trò:** quyết định kỹ thuật do cố vấn đưa ra, câu hỏi requirement do Danny trả lời (xem `CLAUDE.md` §13).
 
 ## Vòng lặp
