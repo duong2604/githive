@@ -1,0 +1,46 @@
+# Configuration only: nothing is published yet (release.disable).
+version: 2
+
+project_name: githive
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - &build
+    id: githive
+    main: ./cmd/githive
+    binary: githive
+    env:
+      - CGO_ENABLED=0
+    goos: [windows, linux, darwin]
+    goarch: [amd64, arm64]
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w -X main.version={{ .Version }} -X main.commit={{ .Commit }} -X main.date={{ .Date }}
+  # Same program under the name git looks for, so `git hive <cmd>` works.
+  - <<: *build
+    id: git-hive
+    binary: git-hive
+
+archives:
+  - ids: [githive, git-hive]
+    formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    files:
+      - LICENSE
+      - README.md
+      - CHANGELOG.md
+
+checksum:
+  name_template: checksums.txt
+
+changelog:
+  disable: true
+
+release:
+  disable: true
