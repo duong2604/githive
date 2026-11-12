@@ -46,7 +46,7 @@ func Execute(info BuildInfo, args []string, stdout, stderr io.Writer) int {
 	if err == nil {
 		return ExitOK
 	}
-	fmt.Fprintln(stderr, "githive:", err)
+	_, _ = fmt.Fprintln(stderr, "githive:", err)
 	var ue usageError
 	if errors.As(err, &ue) {
 		return ExitUsage

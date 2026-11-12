@@ -4,6 +4,7 @@
 package testutil
 
 import (
+	"errors"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -74,7 +75,8 @@ func Git(t testing.TB, dir string, args ...string) string {
 	out, err := cmd.Output()
 	if err != nil {
 		var stderr string
-		if ee, ok := err.(*exec.ExitError); ok {
+		var ee *exec.ExitError
+		if errors.As(err, &ee) {
 			stderr = string(ee.Stderr)
 		}
 		t.Fatalf("git %s (in %s): %v\n%s", strings.Join(args, " "), dir, err, stderr)
