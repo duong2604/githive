@@ -12,7 +12,7 @@ last_updated: 2026-11-13
 
 ## Current phase
 
-Phase 1 — Documentation baseline. Steps 1 and 1b are done; 2a (bootstrap, P02) is in review; 2b (DD-00, DD-03 approval) is next and does not depend on 2a.
+Phase 1 — Documentation baseline. Steps 1, 1b and 2a are done; 1c (BD-00 revision 2, P01c) is in review; 2b (DD-00, DD-03 approval) is next.
 
 ## Scope
 
@@ -30,7 +30,8 @@ From `BD-00-overview.md` section 10 (P01c-D4):
 | --- | --- | --- | --- | --- |
 | 1 Normalize documentation structure | Agent | Done | [PR #1](https://github.com/duong2604/githive/pull/1) | 2026-11-13 |
 | 1b Apply P01 review decisions (P01b) | Agent | Done | [PR #3](https://github.com/duong2604/githive/pull/3) (merged) | 2026-11-13 |
-| 2a Bootstrap project (P02, runs P00 part B steps 0–2) | Agent | In review | [PR #4](https://github.com/duong2604/githive/pull/4) | 2026-11-13 |
+| 1c Refresh BD-00 overview (P01c) | Agent | In review | [PR #5](https://github.com/duong2604/githive/pull/5) | 2026-11-13 |
+| 2a Bootstrap project (P02, runs P00 part B steps 0–2) | Agent | Done | [PR #4](https://github.com/duong2604/githive/pull/4) (merged) | 2026-11-13 |
 | 2b BD-00, BD-03 → DD-00, DD-03 approved | Advisor + Danny | Not started | | |
 | 3 Issues + implementation for DD-00, DD-03 | Agent | Not started | | |
 
@@ -62,3 +63,4 @@ Prompts for each step: [`docs/prompts/README.md`](prompts/README.md) (one prompt
 | 2026-11-13 | PR #1 merged into main (merge commit ee1bf78); branch deleted. Step 1 marked Done | — | Windows 11 |
 | 2026-11-13 | P01b: applied P01b-D1…D7 and CL-01…04; docs-check rules (e) and (f); prompts split into P00–P03 with an index; PR #2 folded in and closed | [#3](https://github.com/duong2604/githive/pull/3) | Windows 11 (Git Bash, Go 1.26.5) |
 | 2026-11-13 | P02: Go module, `githive version` + `--json`, `internal/testutil`, CI (3 OS + docs-check + goreleaser check), GoReleaser config, MIT license, README/CONTRIBUTING/CHANGELOG, ADR-0001/0002; docs-check merged into the root module | [#4](https://github.com/duong2604/githive/pull/4) | Windows 11 locally; CI green on ubuntu, windows, macos |
+| 2026-11-13 | P01c: BD-00 overview revision 2 committed verbatim; wtx naming map dropped; `extra_projects` in CLAUDE.md §5; Scope section; consistency pass (mismatches reported, not changed) | [#5](https://github.com/duong2604/githive/pull/5) | Windows 11 (Git Bash, Go 1.26.5) |

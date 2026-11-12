@@ -2,9 +2,9 @@
 id: P01c
 title: Refresh BD-00 overview to current decisions
 step: "1c"
-status: Ready
+status: Done
 branch: docs/refresh-bd-00
-pr: ""
+pr: "#5"
 depends_on: [P01b]
 decisions: [P01c-D1, P01c-D2, P01c-D3, P01c-D4]
 last_updated: 2026-11-13
