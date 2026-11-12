@@ -18,7 +18,7 @@ Phase 1 — Documentation baseline.
 
 | Step | Owner | Status | Output | Date |
 | --- | --- | --- | --- | --- |
-| 1 Normalize documentation structure | Agent | In progress (branch pushed, PR not opened: gh not authenticated) | branch `docs/normalize-structure` | 13-11-2026 |
+| 1 Normalize documentation structure | Agent | In review | [PR #1](https://github.com/duong2604/githive/pull/1) | 13-11-2026 |
 | 2a Bootstrap project (KICKOFF B, steps 0–2) | Agent | Not started | | |
 | 2b BD-00, BD-03 → DD-00, DD-03 approved | Advisor + Danny | Not started | | |
 | 3 Issues + implementation for DD-00, DD-03 | Agent | Not started | | |
@@ -42,4 +42,4 @@ Prompts for each step: [`docs/prompts/NEXT_STEPS_PROMPTS.md`](prompts/NEXT_STEPS
 
 | Date | Work | PR | OS verified |
 | --- | --- | --- | --- |
-| 13-11-2026 | Normalized docs structure: kebab-case folders, requirements and BD index in Markdown, templates, docs-check tool, README encoding, CLAUDE.md and kickoff prompt updated | PR pending | Windows 11 (Git Bash, Go 1.26.5) |
+| 13-11-2026 | Normalized docs structure: kebab-case folders, requirements and BD index in Markdown, templates, docs-check tool, README encoding, CLAUDE.md and kickoff prompt updated | [#1](https://github.com/duong2604/githive/pull/1) | Windows 11 (Git Bash, Go 1.26.5) |
