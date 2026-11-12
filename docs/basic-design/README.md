@@ -10,6 +10,8 @@ last_updated: 2026-11-13
 
 # Basic design index
 
+The BD-00 row below is the feature document "Shared foundation", to be written as `BD-00-foundation.md`; it covers NFR-01, NFR-02 and NFR-05. [`BD-00-overview.md`](BD-00-overview.md) is the overall architecture and therefore spans every REQ (P01d-D6).
+
 | BD ID | Feature | Commands | DD ID | BD status | DD status | Depends on | REQ |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | BD-00 | Shared foundation: git runner, locking, `--json` output and exit codes, OS-specific paths | (shared) | DD-00 | Not started | Not started | — | NFR-01, NFR-02, NFR-05 |
@@ -40,14 +42,6 @@ REQ mapping comes from the Traceability table in [`docs/requirements/README.md`]
 
 ## Naming
 
-[`BD-00-overview.md`](BD-00-overview.md) is the overall design. It was written while the tool still had the working name `wtx`. Read it with this mapping and do not edit its content:
-
-| In BD-00-overview.md | Read as |
-| --- | --- |
-| `wtx` | `githive` |
-| `wtx.*` (git config keys) | `githive.*` |
-| `WTX_*` (environment variables) | `GITHIVE_*` |
-| `wtx new` / `wtx ls` / `wtx rm` | `githive spawn` / `githive swarm` / `githive retire` |
-| `.wtx.toml`, `wtx.lock` | `.githive.toml`, `githive.lock` |
+[`BD-00-overview.md`](BD-00-overview.md) uses the official GitHive names since revision 2 (P01c); no name mapping is needed.
 
 The progress tracker lives on claude.ai; this repo keeps only the Markdown copy.

@@ -12,7 +12,17 @@ last_updated: 2026-11-13
 
 ## Current phase
 
-Phase 1 — Documentation baseline. Steps 1 and 1b are done; 2a (bootstrap, P02) is in review; 2b (DD-00, DD-03 approval) is next and does not depend on 2a.
+Phase 1 — the documentation baseline and the code skeleton are done (steps 1, 1b, 2a; 1c and 1d in review in PR #5). Next step: 2b (BD-00-foundation, BD-03 → DD-00, DD-03).
+
+## Scope
+
+From `BD-00-overview.md` section 10 (P01c-D4):
+
+| Phase | Scope |
+| --- | --- |
+| MVP | `init`, `config`, `project add/list/config`, `spawn` (with `copy_files` and `postCreate`), `swarm`, `inspect`, `retire <targets>` with CL-03 safety checks, `path`, minimal `doctor`, `--json` and exit codes, per-repo locking, two-layer config |
+| v1 | `sync` with conflict prediction, `retire --merged/--stale/-i`, squash-merge detection, `shell-init`, release with GoReleaser, Scoop/Homebrew and the `git-hive` alias; Windows archives as `.zip` via GoReleaser `format_overrides` (P01d-D7) |
+| v2 | Forge API (MR status, create MR), `--run claude`, busy-worktree marking, per-worktree ports, shared `.githive.toml`, `agent-rules`, TUI dashboard |
 
 ## Plan
 
@@ -20,7 +30,9 @@ Phase 1 — Documentation baseline. Steps 1 and 1b are done; 2a (bootstrap, P02)
 | --- | --- | --- | --- | --- |
 | 1 Normalize documentation structure | Agent | Done | [PR #1](https://github.com/duong2604/githive/pull/1) | 2026-11-13 |
 | 1b Apply P01 review decisions (P01b) | Agent | Done | [PR #3](https://github.com/duong2604/githive/pull/3) (merged) | 2026-11-13 |
-| 2a Bootstrap project (P02, runs P00 part B steps 0–2) | Agent | In review | [PR #4](https://github.com/duong2604/githive/pull/4) | 2026-11-13 |
+| 1c Refresh BD-00 overview (P01c) | Agent | In review | [PR #5](https://github.com/duong2604/githive/pull/5) | 2026-11-13 |
+| 1d Rebase on bootstrap, apply P01c review (P01d) | Agent | In review | [PR #5](https://github.com/duong2604/githive/pull/5) | 2026-11-13 |
+| 2a Bootstrap project (P02, runs P00 part B steps 0–2) | Agent | Done | [PR #4](https://github.com/duong2604/githive/pull/4) (merged) | 2026-11-13 |
 | 2b BD-00, BD-03 → DD-00, DD-03 approved | Advisor + Danny | Not started | | |
 | 3 Issues + implementation for DD-00, DD-03 | Agent | Not started | | |
 
@@ -52,3 +64,5 @@ Prompts for each step: [`docs/prompts/README.md`](prompts/README.md) (one prompt
 | 2026-11-13 | PR #1 merged into main (merge commit ee1bf78); branch deleted. Step 1 marked Done | — | Windows 11 |
 | 2026-11-13 | P01b: applied P01b-D1…D7 and CL-01…04; docs-check rules (e) and (f); prompts split into P00–P03 with an index; PR #2 folded in and closed | [#3](https://github.com/duong2604/githive/pull/3) | Windows 11 (Git Bash, Go 1.26.5) |
 | 2026-11-13 | P02: Go module, `githive version` + `--json`, `internal/testutil`, CI (3 OS + docs-check + goreleaser check), GoReleaser config, MIT license, README/CONTRIBUTING/CHANGELOG, ADR-0001/0002; docs-check merged into the root module | [#4](https://github.com/duong2604/githive/pull/4) | Windows 11 locally; CI green on ubuntu, windows, macos |
+| 2026-11-13 | P01c: BD-00 overview revision 2 committed verbatim; wtx naming map dropped; `extra_projects` in CLAUDE.md §5; Scope section; consistency pass (mismatches reported, not changed) | [#5](https://github.com/duong2604/githive/pull/5) | Windows 11 (Git Bash, Go 1.26.5) |
+| 2026-11-13 | P01d: PR #5 rebased on main after PR #4; ADR-0003 (`--all`, `project@*`); CLAUDE.md §4 (version, shell-init, retire --force, bare `githive` prints help) and §5 key naming; BD-00 overview vs foundation note; v1 zip note | [#5](https://github.com/duong2604/githive/pull/5) | Windows 11 (Git Bash, Go 1.26.5) |
