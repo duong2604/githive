@@ -60,15 +60,19 @@ Binary: `githive`. Release packaging also installs `git-hive`, so `git hive <cmd
 | `githive init` | | Setup wizard: projects root, worktrees root, branch prefix, sync strategy |
 | `githive project add <path>` / `list` / `config <p> --base dev` | `hive` | Register repos (repos under projects root are auto-discovered); list shows the base branch, or `NULL` when unset |
 | `githive spawn <target>` | `new`, `create` | Fetch base, create worktree + branch `<prefix><task>`, copy files, run hooks, print the path |
-| `githive swarm [--all]` | `ls`, `list` | List worktrees: branch, ahead/behind base, dirty, last commit |
+| `githive swarm ['project@*' \| --all]` | `ls`, `list` | List worktrees: branch, ahead/behind base, dirty, last commit; `--all` lists every registered project (ADR-0003) |
 | `githive inspect <target>` | | Detailed status of one worktree |
 | `githive sync <target> [--rebase\|--merge] [--dry-run]` | | Fetch base, predict conflicts (`git merge-tree`), then rebase or merge |
-| `githive retire <targets...> [--merged] [--stale 14d] [-i]` | `rm`, `remove` | Safe removal of worktree + local branch |
+| `githive retire <targets...> [--merged] [--stale 14d] [-i] [--force]` | `rm`, `remove` | Safe removal of worktree + local branch; `--force` skips the CL-03 safety checks |
 | `githive path <target>` | | Print the path (for `cd`) |
+| `githive shell-init` | | Print a shell function for quick `cd` into a worktree (v1) |
 | `githive doctor` | | Environment checks |
 | `githive config get/set` | | Global config |
+| `githive version` | | Print version, commit and build date; `--json` supported (since P02) |
 
-**Target grammar:** `project@task`. Inside a registered repo or one of its worktrees, `task` alone is enough. `project@*` (quote it in shells) or `-p project --all` selects every task. Task names must match `^[a-z0-9][a-z0-9._-]{0,49}$` (no `@`, no `/`) and also pass `git check-ref-format --branch`. The grammar must never need a leading `@`, because PowerShell treats a leading `@` as splatting.
+**Target grammar:** `project@task`. Inside a registered repo or one of its worktrees, `task` alone is enough. `'project@*'` (quote it in shells) selects every task of one project for `swarm`, `sync` and `retire`; `swarm --all` lists every registered project; `-p project --all` is not used (ADR-0003). Task names must match `^[a-z0-9][a-z0-9._-]{0,49}$` (no `@`, no `/`) and also pass `git check-ref-format --branch`. The grammar must never need a leading `@`, because PowerShell treats a leading `@` as splatting.
+
+Running `githive` with no arguments prints help until DD-01 designs the interactive menu (P01d-D3).
 
 Every command accepts `--json` and `--yes` and never blocks waiting for input when stdin is not a TTY. Exit codes: 0 ok, 1 error, 2 bad args/missing config, 3 sync conflict (aborted cleanly), 4 blocked by a safety check, 5 lock timeout. `--json` schemas and exit codes are a public API: changing them after v0.1.0 needs Danny's approval.
 
@@ -77,7 +81,7 @@ Every command accepts `--json` and `--yes` and never blocks waiting for input wh
 - **Go** (latest stable; pin it in `go.mod`), a single static binary built with GoReleaser.
 - **Shell out to the system `git`.** No go-git. Always pass an argument slice (never `sh -c` with concatenated strings), set `LC_ALL=C`, and parse `--porcelain -z` output. Minimum git version is 2.38.
 - **Git is the source of truth** for worktrees (`git worktree list --porcelain -z`). No state database.
-- **Config, two layers:** global TOML at `%APPDATA%\githive\config.toml` (Windows) or `$XDG_CONFIG_HOME/githive/config.toml` (default `~/.config/...`); per-repo settings in `git config --local githive.*`. Write files atomically (temp file, then rename). The global key `extra_projects` lists repos outside `projects_root` registered with `githive project add` (P01c-D3).
+- **Config, two layers:** global TOML at `%APPDATA%\githive\config.toml` (Windows) or `$XDG_CONFIG_HOME/githive/config.toml` (default `~/.config/...`); per-repo settings in `git config --local githive.*`. Write files atomically (temp file, then rename). The global key `extra_projects` lists repos outside `projects_root` registered with `githive project add` (P01c-D3). Key naming (P01d-D5): TOML keys use snake_case (`post_create`, `copy_files`); git config keys use camelCase under `githive.*` (`githive.postCreate`, `githive.copyFiles`).
 - **Precedence:** flag > `GITHIVE_*` env > repo git config > global config > defaults.
 - **Locking:** the `githive.lock` file in `git rev-parse --git-common-dir`, held only around fetch / worktree add / remove / branch delete. 30 s timeout.
 - **Paths:** worktrees live at `<worktrees_root>/<project>/<task>`; the default `worktrees_root` is `<projects_root>/worktrees`. Never put worktrees inside the repo. Use `filepath` everywhere and never hand-build separators.
