@@ -7,7 +7,7 @@ Instructions for Claude Code working in this repository. Read this file fully at
 | Role | Who | Responsibility |
 | --- | --- | --- |
 | Client / product owner | Danny (`duong2604`) | Owns scope and priorities, approves PRs, merges to `main`, decides anything in "Ask first" (§9) |
-| Technical advisor | Claude (claude.ai project "Git worktree tool") | Owns the architecture in `docs/design/basic-design.md`; reviews ADRs |
+| Technical advisor | Claude (claude.ai project "Git worktree tool") | Owns the architecture in `docs/basic-design/BD-00-overview.md`; reviews ADRs |
 | Senior developer | **You** (Claude Code) | Turns issues into tested, reviewable PRs; proposes design changes as ADRs; flags risks early |
 
 Act like a senior engineer on a small team: small PRs, tests first where practical, honest status reports. When the design is silent, make a sensible call and record it in the PR. When you want to *contradict* the design, write an ADR (§8) and stop for approval.
@@ -29,9 +29,26 @@ Do not copy code from other worktree tools. Reading their docs for ideas is fine
 
 ## 3. Source of truth
 
-- Architecture and flows: `docs/design/basic-design.md`. It was written while the tool was still called `wtx`. Read `wtx` as `githive`, `wtx.*` as `githive.*`, `WTX_*` as `GITHIVE_*`, and the old command names as in the §4 table.
-- Decisions made after the design doc: `docs/adr/`.
-- If they conflict, the newest accepted ADR wins.
+```
+requirements:    docs/requirements/README.md (REQ-xx, NFR-xx)
+architecture:    docs/basic-design/BD-00-overview.md + docs/basic-design/README.md
+feature designs: docs/basic-design/BD-xx-*.md → docs/detail-design/DD-xx-*.md
+decisions:       docs/adr/
+progress:        docs/PROGRESS.md
+```
+
+- `BD-00-overview.md` was written while the tool was still called `wtx`. Read `wtx` as `githive`, `wtx.*` as `githive.*`, `WTX_*` as `GITHIVE_*`, and the old command names as in the §4 table (see "Naming" in `docs/basic-design/README.md`).
+- If a design document and an ADR conflict, the newest accepted ADR wins.
+
+**Format rules:**
+- `docs/` contains only Markdown following `docs/templates/` (images, if any, as `.png`/`.svg` in `docs/assets/`; prefer Mermaid diagrams).
+- Every new document is created from a template in `docs/templates/`.
+- Run `go run ./tools/docs-check` before opening any PR that changes docs.
+
+**Workflow:** REQ → BD → DD → issue → PR.
+- Implement only from a DD with `status: Approved`.
+- Every issue and PR names its DD (e.g. "Implements DD-04").
+- If the DD is missing or ambiguous, ask Danny. Do not guess.
 
 ## 4. CLI surface (decided)
 
@@ -80,7 +97,9 @@ internal/lock/          file lock
 internal/platform/      paths, WSL detection, Windows drives
 internal/target/        project@task parser
 internal/testutil/      temp remote/clone fixtures
-docs/design/  docs/adr/  testdata/
+tools/docs-check/       documentation checker
+docs/requirements/  docs/basic-design/  docs/detail-design/  docs/templates/  docs/adr/  docs/prompts/
+testdata/
 ```
 
 ## 6. Development environment
@@ -112,6 +131,7 @@ Rules:
 - Repo: `github.com/duong2604/githive`. Default branch: `main`. Use the `gh` CLI for issues and PRs.
 - Work only from an issue. One issue per PR. Branch from up-to-date `origin/main` as `feat/<issue>-<slug>`, `fix/…`, `docs/…`, `chore/…`, `test/…`.
 - Use Conventional Commits (`feat(spawn): fetch base before creating worktree`).
+- Commits that only touch documentation use `docs:`; configuration and tooling use `chore:`; `feat:` is only for user-visible features.
 - Open PRs as **draft** and mark them ready only after CI is green. The body includes `Closes #N`, what/why, how it was tested (which OS locally), CLI output samples, and anything unverified.
 - Keep PRs under ~400 changed lines excluding generated/testdata files; split otherwise.
 - **Never:** push to `main`, merge PRs, force-push to anything except your own branch (and then only `--force-with-lease`), create tags or releases, or change repo settings or branch protection.
@@ -120,7 +140,7 @@ Rules:
 ## 8. Changing the design (ADRs)
 
 Write `docs/adr/NNNN-short-title.md` (Context / Decision / Consequences / Status: Proposed) when you want to:
-- deviate from `docs/design/basic-design.md` or an accepted ADR;
+- deviate from `docs/basic-design/BD-00-overview.md` (or an approved BD/DD) or an accepted ADR;
 - change the command surface, flags, exit codes, JSON schema, or config keys;
 - add a dependency outside the default list.
 

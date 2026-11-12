@@ -2,7 +2,7 @@
 
 Gồm 3 phần:
 - **A.** Chuẩn bị máy (Danny làm, một lần cho mỗi máy).
-- **B.** Prompt phiên đầu tiên: dựng khung repo và tạo backlog MVP.
+- **B.** Prompt phiên kickoff: chỉ làm Bước 0–2 (dựng khung, CI, testutil, PR). Không tạo issue.
 - **C.** Prompt mẫu cho mỗi task sau này.
 
 ---
@@ -28,7 +28,7 @@ cd githive
 
 Sau đó:
 1. Chép `CLAUDE.md` vào gốc repo. Phiên đầu tiên sẽ commit file này trong PR bootstrap.
-2. Mở tài liệu Basic Design, chọn **Export → Markdown**, lưu thành `docs/design/basic-design.md`.
+2. Mở tài liệu Basic Design, chọn **Export → Markdown**, lưu thành `docs/basic-design/BD-00-overview.md` (đã làm trong PR `docs: normalize documentation structure`).
 3. Chạy `claude` trong thư mục repo rồi dán prompt ở phần B.
 
 ---
@@ -36,9 +36,9 @@ Sau đó:
 ## B. Prompt phiên đầu tiên (dán nguyên văn)
 
 ```text
-Bạn là senior developer của dự án GitHive. Tôi (Danny) là khách hàng/product owner; cố vấn kỹ thuật là người viết docs/design/basic-design.md. Đọc kỹ CLAUDE.md trước khi làm bất cứ điều gì và tuân thủ tuyệt đối. Trao đổi với tôi bằng tiếng Việt; mọi thứ ghi vào repo bằng tiếng Anh.
+Bạn là senior developer của dự án GitHive. Tôi (Danny) là khách hàng/product owner; cố vấn kỹ thuật là người viết docs/basic-design/BD-00-overview.md. Đọc kỹ CLAUDE.md và docs/PROGRESS.md trước khi làm bất cứ điều gì và tuân thủ tuyệt đối. Trao đổi với tôi bằng tiếng Việt; mọi thứ ghi vào repo bằng tiếng Anh.
 
-Repo hiện chỉ có README.md trên main. Nhiệm vụ phiên này: dựng khung dự án và lập backlog MVP. CHƯA implement tính năng.
+Repo hiện chỉ có tài liệu trên main (CLAUDE.md, README.md, docs/, tools/docs-check). Nhiệm vụ phiên này: chỉ làm Bước 0–2 (dựng khung, CI, testutil, PR). KHÔNG tạo issue và CHƯA implement tính năng.
 
 Bước 0 — Kiểm tra môi trường, báo cáo rồi mới làm tiếp:
 - Đang ở Windows hay WSL? Đường dẫn repo có nằm dưới /mnt/* không?
@@ -56,32 +56,16 @@ Bước 1 — Nhánh chore/bootstrap tạo từ origin/main. Tạo:
 - CONTRIBUTING.md ngắn, CHANGELOG.md (mục Unreleased), LICENSE theo lựa chọn của tôi.
 - .github/pull_request_template.md, .github/ISSUE_TEMPLATE/{feature,bug}.md.
 - docs/adr/0001-record-architecture-decisions.md và 0002-core-technical-decisions.md (Accepted), tóm tắt CLAUDE.md §4–5: Go, git CLI, config 2 tầng, khóa theo repo, cú pháp project@task, tên lệnh spawn/swarm/retire kèm alias.
-- Commit luôn CLAUDE.md; commit docs/design/basic-design.md nếu file đã có.
+- CLAUDE.md và docs/ đã có trên main; chỉ cập nhật README.md, và docs/PROGRESS.md theo Prompt 2 trong docs/prompts/NEXT_STEPS_PROMPTS.md.
 
 Bước 2 — Mở draft PR "chore: bootstrap project", chờ CI xanh trên cả 3 OS. CI đỏ thì tự sửa. Xanh rồi thì chuyển sang ready for review. Không merge.
 
-Bước 3 — Tạo trên GitHub bằng gh:
-- Milestones: MVP, v1, v2.
-- Labels: mvp, v1, v2, design, bug, good-first-issue, windows, wsl.
-- Issue cho MVP, mỗi issue có Context, Acceptance criteria dạng checklist, Out of scope, và test cần có:
-  1. target: parser `project@task` + validate tên task
-  2. platform: tính đường dẫn mặc định (Windows có/không có ổ D:, WSL, Linux, macOS), phát hiện WSL và repo nằm dưới /mnt/*
-  3. config: global TOML + repo git config `githive.*` + thứ tự ưu tiên + ghi atomic
-  4. git: runner (args slice, LC_ALL=C, timeout) + parser `worktree list --porcelain -z`
-  5. lock: khóa theo git-common-dir, timeout, test đồng thời
-  6. `githive init` (wizard + chế độ flag)
-  7. `githive project add/list/config` (list hiện NULL khi chưa có base branch)
-  8. `githive spawn` (fetch base, --no-track, rollback, copy_files, postCreate)
-  9. `githive swarm` (ahead/behind, dirty, --json)
-  10. `githive retire <targets...>` (các kiểm tra an toàn; --merged, --stale, -i để sang v1)
-  11. `githive path` + `githive doctor` bản tối thiểu
-- Issue v1 (chỉ cần tiêu đề + 2–3 dòng): sync có dự đoán conflict, retire --merged/--stale/-i, phát hiện squash-merge, release GoReleaser + Scoop/Homebrew, alias git-hive.
+Bước 3 — Issues are created per DD after it is Approved — see docs/prompts/NEXT_STEPS_PROMPTS.md, Prompt 3.
 
 Bước 4 — Báo cáo cho tôi bằng tiếng Việt:
-- Link PR, link các issue.
+- Link PR.
 - Đã kiểm chứng gì trên OS nào.
 - Rủi ro hoặc điểm chưa chắc chắn.
-- Thứ tự làm các issue MVP mà bạn đề xuất, và những issue nào có thể giao cho nhiều agent làm song song mà không đụng file của nhau.
 
 Dừng sau bước 4.
 ```
@@ -91,7 +75,7 @@ Dừng sau bước 4.
 ## C. Prompt mẫu cho mỗi task
 
 ```text
-Làm issue #<N> của GitHive. Đọc CLAUDE.md và issue (gh issue view <N>) trước.
+Làm issue #<N> của GitHive. Implements DD-xx — đọc CLAUDE.md, file DD và issue (gh issue view <N>) trước; chỉ làm đúng phạm vi DD.
 - Làm trong worktree riêng, nhánh feat/<N>-<slug> tạo từ origin/main. Không đụng worktree hoặc nhánh khác.
 - Lên kế hoạch ngắn (các file sẽ sửa, test sẽ viết) rồi làm luôn. Chỉ dừng hỏi khi gặp mục "Ask Danny first" hoặc cần ADR.
 - Viết test trước với parser/logic thuần; integration test dùng internal/testutil.
@@ -99,4 +83,4 @@ Làm issue #<N> của GitHive. Đọc CLAUDE.md và issue (gh issue view <N>) tr
 - Báo cáo bằng tiếng Việt theo Definition of Done trong CLAUDE.md §11.
 ```
 
-Khi chạy nhiều agent song song, giao mỗi agent một issue ít đụng nhau, ví dụ #1 (target), #2 (platform) và #4 (git runner). Mỗi agent mở một terminal riêng, chạy `claude --worktree issue-<N>` rồi dán prompt C.
+Khi chạy nhiều agent song song, giao mỗi agent một issue ít đụng nhau, theo mục "Can run in parallel with" trong issue (ví dụ issue của DD-03 target và DD-00 git runner). Mỗi agent mở một terminal riêng, chạy `claude --worktree issue-<N>` rồi dán prompt C.
