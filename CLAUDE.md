@@ -77,7 +77,7 @@ Every command accepts `--json` and `--yes` and never blocks waiting for input wh
 - **Go** (latest stable; pin it in `go.mod`), a single static binary built with GoReleaser.
 - **Shell out to the system `git`.** No go-git. Always pass an argument slice (never `sh -c` with concatenated strings), set `LC_ALL=C`, and parse `--porcelain -z` output. Minimum git version is 2.38.
 - **Git is the source of truth** for worktrees (`git worktree list --porcelain -z`). No state database.
-- **Config, two layers:** global TOML at `%APPDATA%\githive\config.toml` (Windows) or `$XDG_CONFIG_HOME/githive/config.toml` (default `~/.config/...`); per-repo settings in `git config --local githive.*`. Write files atomically (temp file, then rename).
+- **Config, two layers:** global TOML at `%APPDATA%\githive\config.toml` (Windows) or `$XDG_CONFIG_HOME/githive/config.toml` (default `~/.config/...`); per-repo settings in `git config --local githive.*`. Write files atomically (temp file, then rename). The global key `extra_projects` lists repos outside `projects_root` registered with `githive project add` (P01c-D3).
 - **Precedence:** flag > `GITHIVE_*` env > repo git config > global config > defaults.
 - **Locking:** the `githive.lock` file in `git rev-parse --git-common-dir`, held only around fetch / worktree add / remove / branch delete. 30 s timeout.
 - **Paths:** worktrees live at `<worktrees_root>/<project>/<task>`; the default `worktrees_root` is `<projects_root>/worktrees`. Never put worktrees inside the repo. Use `filepath` everywhere and never hand-build separators.

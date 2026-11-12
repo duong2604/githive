@@ -40,14 +40,6 @@ REQ mapping comes from the Traceability table in [`docs/requirements/README.md`]
 
 ## Naming
 
-[`BD-00-overview.md`](BD-00-overview.md) is the overall design. It was written while the tool still had the working name `wtx`. Read it with this mapping and do not edit its content:
-
-| In BD-00-overview.md | Read as |
-| --- | --- |
-| `wtx` | `githive` |
-| `wtx.*` (git config keys) | `githive.*` |
-| `WTX_*` (environment variables) | `GITHIVE_*` |
-| `wtx new` / `wtx ls` / `wtx rm` | `githive spawn` / `githive swarm` / `githive retire` |
-| `.wtx.toml`, `wtx.lock` | `.githive.toml`, `githive.lock` |
+[`BD-00-overview.md`](BD-00-overview.md) uses the official GitHive names since revision 2 (P01c); no name mapping is needed.
 
 The progress tracker lives on claude.ai; this repo keeps only the Markdown copy.

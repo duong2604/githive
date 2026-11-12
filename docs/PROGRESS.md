@@ -14,6 +14,16 @@ last_updated: 2026-11-13
 
 Phase 1 — Documentation baseline. Steps 1 and 1b are done; 2a (bootstrap, P02) is in review; 2b (DD-00, DD-03 approval) is next and does not depend on 2a.
 
+## Scope
+
+From `BD-00-overview.md` section 10 (P01c-D4):
+
+| Phase | Scope |
+| --- | --- |
+| MVP | `init`, `config`, `project add/list/config`, `spawn` (with `copy_files` and `postCreate`), `swarm`, `inspect`, `retire <targets>` with CL-03 safety checks, `path`, minimal `doctor`, `--json` and exit codes, per-repo locking, two-layer config |
+| v1 | `sync` with conflict prediction, `retire --merged/--stale/-i`, squash-merge detection, `shell-init`, release with GoReleaser, Scoop/Homebrew and the `git-hive` alias |
+| v2 | Forge API (MR status, create MR), `--run claude`, busy-worktree marking, per-worktree ports, shared `.githive.toml`, `agent-rules`, TUI dashboard |
+
 ## Plan
 
 | Step | Owner | Status | Output | Date |
