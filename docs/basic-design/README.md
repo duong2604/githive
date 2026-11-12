@@ -10,6 +10,8 @@ last_updated: 2026-11-13
 
 # Basic design index
 
+The BD-00 row below is the feature document "Shared foundation", to be written as `BD-00-foundation.md`; it covers NFR-01, NFR-02 and NFR-05. [`BD-00-overview.md`](BD-00-overview.md) is the overall architecture and therefore spans every REQ (P01d-D6).
+
 | BD ID | Feature | Commands | DD ID | BD status | DD status | Depends on | REQ |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | BD-00 | Shared foundation: git runner, locking, `--json` output and exit codes, OS-specific paths | (shared) | DD-00 | Not started | Not started | — | NFR-01, NFR-02, NFR-05 |
