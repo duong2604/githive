@@ -2,7 +2,7 @@
 id: P01d
 title: Rebase P01c on bootstrap and apply its review decisions
 step: "1d"
-status: Ready
+status: Done
 branch: docs/refresh-bd-00
 pr: "#5"
 depends_on: [P01c, P02]
