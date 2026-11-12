@@ -2,9 +2,9 @@
 id: P01b
 title: Apply review decisions for P01
 step: "1b"
-status: Running
+status: Done
 branch: docs/apply-p01-review
-pr: ""
+pr: "#3"
 depends_on: [P01]
 decisions: [P01b-D1, P01b-D2, P01b-D3, P01b-D4, P01b-D5, P01b-D6, P01b-D7]
 clarifications: [CL-01, CL-02, CL-03, CL-04]
