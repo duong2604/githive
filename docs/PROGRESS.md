@@ -19,11 +19,11 @@ Phase 1 — Documentation baseline. Step 1 is done; next are 2a (bootstrap) and 
 | Step | Owner | Status | Output | Date |
 | --- | --- | --- | --- | --- |
 | 1 Normalize documentation structure | Agent | Done | [PR #1](https://github.com/duong2604/githive/pull/1) | 2026-11-13 |
-| 2a Bootstrap project (KICKOFF B, steps 0–2) | Agent | Not started | | |
+| 2a Bootstrap project (P02, runs P00 part B steps 0–2) | Agent | Not started | | |
 | 2b BD-00, BD-03 → DD-00, DD-03 approved | Advisor + Danny | Not started | | |
 | 3 Issues + implementation for DD-00, DD-03 | Agent | Not started | | |
 
-Prompts for each step: [`docs/prompts/NEXT_STEPS_PROMPTS.md`](prompts/NEXT_STEPS_PROMPTS.md).
+Prompts for each step: [`docs/prompts/README.md`](prompts/README.md) (one prompt per session).
 
 ## Review findings (2026-11-13)
 

@@ -1,19 +1,22 @@
-# GitHive — Prompt cho 3 bước tiếp theo
-
-Cách dùng: mỗi bước là **một phiên Claude Code riêng** (`claude` trong thư mục repo). Chỉ bắt đầu bước sau khi PR của bước trước đã được merge vào `main`.
-
-| Bước | Ai làm | Điều kiện bắt đầu | Kết quả |
-| --- | --- | --- | --- |
-| 1 | Agent (Prompt 1) | Danny đã đặt file thiết kế tổng thể export vào repo (xem bên dưới) | PR `docs: normalize documentation structure` |
-| 2a | Agent (Prompt 2) | PR bước 1 đã merge | PR `chore: bootstrap project` |
-| 2b | Cố vấn + Danny (song song với 2a) | PR bước 1 đã merge | BD-00, BD-03 → DD-00, DD-03 ở trạng thái "Đã chốt" |
-| 3 | Agent (Prompt 3, rồi Prompt mẫu C trong KICKOFF) | PR bước 2a đã merge **và** DD-00, DD-03 đã chốt | Issue + PR cho DD-00 và DD-03 |
-
-**Việc Danny làm trước Prompt 1:** mở tài liệu Basic Design trên claude.ai, chọn **Export → Markdown**, rồi lưu vào repo với tên `docs/basic-design/BD-00-overview.md`. Thư mục `docs/basic-design/` chưa có thì cứ tạo; agent sẽ gộp nó với thư mục cũ. Chép luôn file này vào `docs/Promtps/NEXT_STEPS_PROMPTS.md`; agent sẽ chuyển nó sang `docs/prompts/` cùng các file khác.
-
+---
+id: P01
+title: Normalize documentation structure
+step: "1"
+status: Done
+branch: docs/normalize-structure
+pr: "#1"
+depends_on: []
+decisions: []
+last_updated: 2026-11-13
 ---
 
-## Prompt 1 — Chuẩn hóa tài liệu (dán nguyên văn)
+# P01 — Chuẩn hóa tài liệu
+
+**Việc Danny làm trước:** export tài liệu Basic Design ra Markdown và lưu thành `docs/basic-design/BD-00-overview.md`.
+
+Nội dung bên dưới giữ nguyên văn như lúc chạy, nên vẫn nhắc tới `NEXT_STEPS_PROMPTS.md` (nay đã tách thành các file P0x).
+
+**Kết quả:** đã chạy ngày 2026-11-13. Các quyết định sau review nằm ở [P01b](P01b-apply-review-decisions.md).
 
 ```text
 Bạn là senior developer của dự án GitHive. Đọc CLAUDE.md trước. Trao đổi với tôi bằng tiếng Việt; mọi thứ ghi vào repo bằng tiếng Anh, TRỪ nội dung requirement gốc, được giữ bằng tiếng Việt như tôi viết.
@@ -142,26 +145,3 @@ Bước 9 — Báo cáo cho tôi bằng tiếng Việt:
 Dừng ở đây.
 ```
 
----
-
-## Prompt 2 — Dựng khung dự án (sau khi PR bước 1 đã merge)
-
-```text
-Đọc CLAUDE.md, docs/PROGRESS.md và docs/prompts/KICKOFF_PROMPT.md. Thực hiện đúng phần B, Bước 0–2 của KICKOFF_PROMPT.md. Trong CI, thêm một job chạy `go run ./tools/docs-check` (chỉ cần chạy trên ubuntu). Nếu tạo go.mod ở gốc repo, gộp module tools/docs-check vào module gốc và xóa go.mod riêng của nó. Không tạo issue tính năng và không viết logic tính năng: các phần đó chờ DD được duyệt.
-Khi xong: cập nhật docs/PROGRESS.md (bước 2a → In review, thêm link PR, thêm dòng Log), rồi báo cáo bằng tiếng Việt theo Bước 4 của KICKOFF, bỏ phần đề xuất thứ tự issue.
-```
-
----
-
-## Prompt 3 — Tạo issue từ DD đã duyệt (sau khi DD-00, DD-03 đã Approved)
-
-```text
-Đọc CLAUDE.md và docs/PROGRESS.md. Với mỗi file trong docs/detail-design/ có Status: Approved mà chưa có issue (xem bảng Traceability trong docs/requirements/README.md):
-- Tạo milestone MVP và các label (mvp, v1, v2, design, bug, windows, wsl) nếu chưa có.
-- Tạo issue tiêu đề "[DD-xx] <tên>". Body gồm: link tới DD, Acceptance criteria chép đúng từ mục acceptance/test của DD (không tự thêm bớt), danh sách package bị ảnh hưởng, và mục "Can run in parallel with".
-- Một DD quá lớn (hơn khoảng 400 dòng code dự kiến) thì đề xuất cách tách thành nhiều issue và hỏi tôi trước khi tạo.
-- Mở một PR docs: cập nhật cột Issue trong bảng Traceability và trong docs/basic-design/README.md, cập nhật docs/PROGRESS.md (bước 3 → In progress).
-Báo cáo bằng tiếng Việt: danh sách issue, issue nào giao được cho nhiều agent làm song song. Không bắt đầu code.
-```
-
-Sau đó, mỗi issue được giao bằng **Prompt mẫu C** trong `docs/prompts/KICKOFF_PROMPT.md`. Bổ sung vào đầu prompt dòng: "Implements DD-xx — đọc file DD trước, chỉ làm đúng phạm vi DD."
