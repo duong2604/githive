@@ -1,3 +1,13 @@
+---
+id: BD-00-overview
+title: wtx — Basic Design (overall architecture)
+status: Approved
+req: [NFR-01, NFR-02, NFR-05]
+depends_on: []
+owner: Danny (duong2604)
+last_updated: 12-11-2026
+---
+
 # wtx — Basic Design: CLI quản lý Git Worktree cho nhiều Claude agent
 
 Nov 12, 2026 · @danny
@@ -103,6 +113,8 @@ D:\workspace\
 ## 5. Kiến trúc tầng & module
 
 &#91;embedded content: Kiến trúc wtx · 4 tầng, 3 tài nguyên ngoài\]
+
+> Note: diagram omitted in export — see claude.ai doc.
 
 CLI chỉ phân tích tham số và gọi service; service chứa logic nghiệp vụ và không biết đến terminal; tầng hạ tầng là nơi duy nhất chạm vào git, file hệ thống và OS. Nhờ vậy test service bằng repo git tạm trong thư mục temp, chạy giống nhau trên CI Windows/Linux/macOS.
 
