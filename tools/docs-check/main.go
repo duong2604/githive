@@ -10,6 +10,10 @@
 //	d) .md files in docs/ and at the repository root are UTF-8 without CRLF (P01b-D3);
 //	e) every front matter last_updated is a valid YYYY-MM-DD date (P01b-D5);
 //	f) docs/prompts/ files except README.md match promptNameRe and have prompt front matter (P01b-D7).
+//
+// Size (P02-D3): there is no fixed line limit. When this file grows past about
+// 250 lines, split it into several files in this package (e.g. rules.go,
+// frontmatter.go).
 package main
 
 import (
