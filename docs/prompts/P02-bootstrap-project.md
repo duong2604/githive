@@ -2,9 +2,9 @@
 id: P02
 title: Bootstrap the Go project
 step: "2a"
-status: Ready
+status: Done
 branch: chore/bootstrap
-pr: ""
+pr: "#4"
 depends_on: [P01b]
 decisions: [P02-D1, P02-D2, P02-D3, P02-D4]
 last_updated: 2026-11-13

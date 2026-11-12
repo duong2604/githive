@@ -18,8 +18,8 @@ Mỗi phiên Claude Code chạy đúng một prompt. Các prompt dưới đây d
 | --- | --- | --- | --- | --- | --- |
 | P00 | [P00-kickoff.md](P00-kickoff.md) | 0 | Ready | — | — |
 | P01 | [P01-normalize-docs.md](P01-normalize-docs.md) | 1 | Done | `docs/normalize-structure` / [#1](https://github.com/duong2604/githive/pull/1) (merged) | — |
-| P01b | [P01b-apply-review-decisions.md](P01b-apply-review-decisions.md) | 1b | Done | `docs/apply-p01-review` / [#3](https://github.com/duong2604/githive/pull/3) (in review) | P01b-D1…D7, CL-01…04 |
-| P02 | [P02-bootstrap-project.md](P02-bootstrap-project.md) | 2a | Ready | `chore/bootstrap` | — |
+| P01b | [P01b-apply-review-decisions.md](P01b-apply-review-decisions.md) | 1b | Done | `docs/apply-p01-review` / [#3](https://github.com/duong2604/githive/pull/3) (merged) | P01b-D1…D7, CL-01…04 |
+| P02 | [P02-bootstrap-project.md](P02-bootstrap-project.md) | 2a | Done | `chore/bootstrap` / [#4](https://github.com/duong2604/githive/pull/4) (in review) | P02-D1…D4 |
 | P03 | [P03-create-issues-from-dd.md](P03-create-issues-from-dd.md) | 3 | Ready | `docs/issues-from-dd` | — |
 
 ## Quy ước
