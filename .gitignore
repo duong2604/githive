@@ -1,0 +1,11 @@
+# Build output
+/dist/
+/githive
+/githive.exe
+/git-hive
+/git-hive.exe
+
+# Test and coverage output
+*.test
+*.out
+coverage.*
