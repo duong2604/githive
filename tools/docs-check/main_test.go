@@ -7,7 +7,9 @@ import (
 	"testing"
 )
 
-const validFM = "---\nid: BD-04\ntitle: Spawn\nstatus: Draft   # comment\nreq: [REQ-04]\ndepends_on: []\nowner: Danny\nlast_updated: 13-11-2026\n---\n\n# BD-04\n"
+const validFM = "---\nid: BD-04\ntitle: Spawn\nstatus: Draft   # comment\nreq: [REQ-04]\ndepends_on: []\nowner: Danny\nlast_updated: 2026-11-13\n---\n\n# BD-04\n"
+
+const validPrompt = "---\nid: P01b\ntitle: Apply review\nstep: \"1b\"\nstatus: Ready\nbranch: docs/x\npr: \"\"\ndepends_on: [P01]\ndecisions: []\nlast_updated: 2026-11-13\n---\n"
 
 func TestCheck(t *testing.T) {
 	tests := []struct {
@@ -20,10 +22,14 @@ func TestCheck(t *testing.T) {
 			"docs/basic-design/BD-04-spawn.md":    validFM,
 			"docs/basic-design/BD-00-overview.md": validFM,
 			"docs/basic-design/README.md":         "# index\n",
-			"docs/templates/BD-template.md":       "---\nid: BD-xx\n---\n",
+			"docs/templates/BD-template.md":       "---\nid: BD-xx\nlast_updated: YYYY-MM-DD\n---\n",
 			"docs/assets/flow.svg":                "<svg/>",
 			"docs/detail-design/.gitkeep":         "",
 			"docs/adr/0001-record-decisions.md":   validFM,
+			"docs/adr/0002-rejected.md":           strings.Replace(validFM, "status: Draft", "status: Rejected", 1),
+			"docs/prompts/P01b-apply-review.md":   validPrompt,
+			"docs/prompts/README.md":              "---\nid: PROMPTS-INDEX\nlast_updated: 2026-11-13\n---\n",
+			"docs/PROGRESS.md":                    "# no front matter\n",
 		}, nil},
 		// Rule a
 		{"a: docx in docs", map[string]string{"docs/requirements/x.docx": "x"}, []string{"only .md"}},
@@ -35,12 +41,22 @@ func TestCheck(t *testing.T) {
 		{"b: missing field", map[string]string{"docs/detail-design/DD-04-spawn.md": strings.Replace(validFM, "owner: Danny\n", "", 1)}, []string{"missing field owner"}},
 		{"b: empty title", map[string]string{"docs/detail-design/DD-04-spawn.md": strings.Replace(validFM, "title: Spawn", "title:", 1)}, []string{"title is empty"}},
 		{"b: bad status", map[string]string{"docs/adr/0002-x.md": strings.Replace(validFM, "status: Draft", "status: Done", 1)}, []string{`status "Done"`}},
+		{"b: Rejected outside ADR", map[string]string{"docs/basic-design/BD-04-spawn.md": strings.Replace(validFM, "status: Draft", "status: Rejected", 1)}, []string{`status "Rejected"`}},
 		// Rule c
 		{"c: uppercase slug", map[string]string{"docs/basic-design/BD-04-Spawn.md": validFM}, []string{"file name must match"}},
 		{"c: one-digit number", map[string]string{"docs/detail-design/DD-4-spawn.md": validFM}, []string{"file name must match"}},
 		// Rule d
-		{"d: CRLF", map[string]string{"docs/prompts/x.md": "a\r\nb\r\n"}, []string{"CRLF"}},
+		{"d: CRLF", map[string]string{"docs/requirements/x.md": "a\r\nb\r\n"}, []string{"CRLF"}},
 		{"d: UTF-16 root README", map[string]string{"README.md": "\xff\xfe#\x00 \x00x\x00", "docs/x.md": "ok\n"}, []string{"not valid UTF-8"}},
+		// Rule e
+		{"e: dd-mm-yyyy date", map[string]string{"docs/basic-design/BD-04-spawn.md": strings.Replace(validFM, "2026-11-13", "13-11-2026", 1)}, []string{"not a valid YYYY-MM-DD"}},
+		{"e: impossible date", map[string]string{"docs/adr/0003-x.md": strings.Replace(validFM, "2026-11-13", "2026-02-30", 1)}, []string{"not a valid YYYY-MM-DD"}},
+		{"e: date in any front matter", map[string]string{"docs/PROGRESS.md": "---\nid: PROGRESS\nlast_updated: 2026/11/13\n---\n"}, []string{"not a valid YYYY-MM-DD"}},
+		// Rule f
+		{"f: prompt name", map[string]string{"docs/prompts/KICKOFF_PROMPT.md": validPrompt}, []string{"prompt file name must match"}},
+		{"f: prompt missing field", map[string]string{"docs/prompts/P02-bootstrap.md": strings.Replace(validPrompt, "decisions: []\n", "", 1)}, []string{"missing field decisions"}},
+		{"f: prompt status", map[string]string{"docs/prompts/P02-bootstrap.md": strings.Replace(validPrompt, "status: Ready", "status: Approved", 1)}, []string{`status "Approved"`}},
+		{"f: prompt without front matter", map[string]string{"docs/prompts/P03-issues.md": "# P03\n"}, []string{"missing YAML front matter"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
