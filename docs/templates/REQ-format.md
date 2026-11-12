@@ -5,7 +5,7 @@ status: Approved
 req: []
 depends_on: []
 owner: Danny (duong2604)
-last_updated: 13-11-2026
+last_updated: 2026-11-13
 ---
 
 # Requirement ID format
@@ -18,7 +18,7 @@ Requirements live in [`docs/requirements/README.md`](../requirements/README.md).
 - `NFR-xx`: non-functional requirement, a quality the whole tool must have (platforms, persistence, concurrency, UX). Two digits, starting at `NFR-01`.
 - IDs are never reused or renumbered. A dropped requirement keeps its ID and gets status `Dropped` in the Traceability table.
 - One paragraph may carry several tags; one ID may be tagged on several paragraphs.
-- A new requirement gets the next free number and is appended to the original text in its own section with the date (`dd-mm-yyyy`) and the author.
+- A new requirement gets the next free number and is appended to the original text in its own section with the date (`YYYY-MM-DD`) and the author.
 
 ## Requirement IDs table
 

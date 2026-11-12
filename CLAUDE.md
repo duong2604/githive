@@ -38,12 +38,13 @@ progress:        docs/PROGRESS.md
 ```
 
 - `BD-00-overview.md` was written while the tool was still called `wtx`. Read `wtx` as `githive`, `wtx.*` as `githive.*`, `WTX_*` as `GITHIVE_*`, and the old command names as in the §4 table (see "Naming" in `docs/basic-design/README.md`).
-- If a design document and an ADR conflict, the newest accepted ADR wins.
+- If a design document and an ADR conflict, the newest Approved ADR wins.
 
 **Format rules:**
 - `docs/` contains only Markdown following `docs/templates/` (images, if any, as `.png`/`.svg` in `docs/assets/`; prefer Mermaid diagrams).
 - Every new document is created from a template in `docs/templates/`.
 - Run `go run ./tools/docs-check` before opening any PR that changes docs.
+- `docs-check` also allows `.gitkeep` files (to keep empty folders) and checks the encoding of the `*.md` files at the repository root (P01b-D3).
 
 **Workflow:** REQ → BD → DD → issue → PR.
 - Implement only from a DD with `status: Approved`.
@@ -139,12 +140,12 @@ Rules:
 
 ## 8. Changing the design (ADRs)
 
-Write `docs/adr/NNNN-short-title.md` (Context / Decision / Consequences / Status: Proposed) when you want to:
-- deviate from `docs/basic-design/BD-00-overview.md` (or an approved BD/DD) or an accepted ADR;
+Write `docs/adr/NNNN-short-title.md` (Context / Decision / Consequences / status: In review) when you want to:
+- deviate from `docs/basic-design/BD-00-overview.md` (or an approved BD/DD) or an Approved ADR;
 - change the command surface, flags, exit codes, JSON schema, or config keys;
 - add a dependency outside the default list.
 
-Open the ADR in its own PR and tell Danny in Vietnamese what you propose and why. He'll take it to the advisor. Don't build on a Proposed ADR until it's Accepted.
+Open the ADR in its own PR and tell Danny in Vietnamese what you propose and why. He'll take it to the advisor. Don't build on an ADR until it is Approved.
 
 ## 9. Ask Danny first
 
@@ -176,3 +177,22 @@ Open the ADR in its own PR and tell Danny in Vietnamese what you propose and why
 - Validate task and project names before building paths; refuse any path that resolves outside `worktrees_root`.
 - Hooks come only from the user's global config or the repo's local git config. A repo-committed `.githive.toml` (v2) must require explicit user trust before its hooks run.
 - Never print tokens or remote URLs that contain credentials (strip `user:pass@`).
+
+## 13. Reporting & escalation
+
+End every session with a report to Danny in Vietnamese, at most ~40 lines, using exactly these headings:
+
+```
+## Báo cáo — <prompt ID, e.g. P02> — <YYYY-MM-DD>
+1. Kết quả: Done | Partial | Blocked — one sentence
+2. Nhánh / PR / commit cuối
+3. Đã làm (≤ 5 bullets)
+4. Lệch so với prompt hoặc thiết kế — every deviation, however small: what and why ("Không có" if none)
+5. Câu hỏi kỹ thuật → cố vấn — each with your recommended option
+6. Câu hỏi requirement/spec → Danny — each with the interpretation you used meanwhile
+7. Kiểm chứng — OS, commands run, results; what is NOT verified
+8. Việc Danny cần làm — exact commands
+```
+
+Routing: technical questions (architecture, libraries, git behaviour, file formats, conventions) are decided by the advisor; Danny only reviews. Questions about requirements and product behaviour (what the user sees, defaults, safety policy, naming) are answered by Danny. When unsure which kind, put it under 5. Do not block on a question if a reversible default exists: use it, list it, continue.
+Every prompt lives in docs/prompts/ with an ID (see docs/prompts/README.md). Decisions are cited by full ID (e.g. P01b-D5); requirement clarifications by CL-xx. Update docs/PROGRESS.md and docs/prompts/README.md before writing the report.

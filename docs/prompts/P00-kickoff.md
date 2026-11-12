@@ -1,3 +1,15 @@
+---
+id: P00
+title: Kickoff (machine setup, bootstrap, task template)
+step: "0"
+status: Ready
+branch: ""
+pr: ""
+depends_on: []
+decisions: []
+last_updated: 2026-11-13
+---
+
 # Prompt cho Claude Code — GitHive
 
 Gồm 3 phần:
@@ -55,12 +67,12 @@ Bước 1 — Nhánh chore/bootstrap tạo từ origin/main. Tạo:
 - README.md tiếng Anh: tầm nhìn, trạng thái "pre-alpha", bảng lệnh dự kiến (CLAUDE.md §4), cách build.
 - CONTRIBUTING.md ngắn, CHANGELOG.md (mục Unreleased), LICENSE theo lựa chọn của tôi.
 - .github/pull_request_template.md, .github/ISSUE_TEMPLATE/{feature,bug}.md.
-- docs/adr/0001-record-architecture-decisions.md và 0002-core-technical-decisions.md (Accepted), tóm tắt CLAUDE.md §4–5: Go, git CLI, config 2 tầng, khóa theo repo, cú pháp project@task, tên lệnh spawn/swarm/retire kèm alias.
-- CLAUDE.md và docs/ đã có trên main; chỉ cập nhật README.md, và docs/PROGRESS.md theo Prompt 2 trong docs/prompts/NEXT_STEPS_PROMPTS.md.
+- docs/adr/0001-record-architecture-decisions.md và 0002-core-technical-decisions.md (Approved), tóm tắt CLAUDE.md §4–5: Go, git CLI, config 2 tầng, khóa theo repo, cú pháp project@task, tên lệnh spawn/swarm/retire kèm alias.
+- CLAUDE.md và docs/ đã có trên main; chỉ cập nhật README.md, và docs/PROGRESS.md theo docs/prompts/P02-bootstrap-project.md.
 
 Bước 2 — Mở draft PR "chore: bootstrap project", chờ CI xanh trên cả 3 OS. CI đỏ thì tự sửa. Xanh rồi thì chuyển sang ready for review. Không merge.
 
-Bước 3 — Issues are created per DD after it is Approved — see docs/prompts/NEXT_STEPS_PROMPTS.md, Prompt 3.
+Bước 3 — Issues are created per DD after it is Approved — see docs/prompts/P03-create-issues-from-dd.md.
 
 Bước 4 — Báo cáo cho tôi bằng tiếng Việt:
 - Link PR.

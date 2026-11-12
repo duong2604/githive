@@ -5,7 +5,7 @@ status: Approved
 req: []
 depends_on: []
 owner: Danny (duong2604)
-last_updated: 13-11-2026
+last_updated: 2026-11-13
 ---
 
 # Requirements — CLI Tool For Worktree
@@ -33,6 +33,19 @@ Backslashes are escaped (`\\`) so the rendered text matches the original documen
    6. **[REQ-06]** Cho phép tính năng pull code mới nhất từ  nhánh “dev” và rebase / merge các thay đổi đó lên worktree đang làm việc. Tôi cần cân nhắc nếu worktree hiện tại đang có nhiều commit có thể gây xung đột cần tư vấn đánh giá thêm 
    7. **[REQ-07]** Tính năng xóa nhiều worktree của một dự án để làm sạch bộ nhớ máy tính và không gian lưu trữ khi làm việc xong với worktree cũ. Sau khi làm việc xong mà không xóa worktree vẫn tồn tại trong D:\\\\workspace\\\\worktrees\\\\
    8. **[REQ-08] [NFR-04]** Tính năng show danh sách dự án đang nằm trong workspace\\\\. Tính năng kiểm tra nhánh chỉ định chính để tạo workspace của từng dự án, nếu chưa  cấu hình đẻ NULL, nếu cấu hình khai báo thì hiển thị tên nhánh tương ứng. Đảm bảo các thông tin cài đặt không bị xóa hoặc mất khi hết phiên làm việc hoặc tắt máy.
+
+## Clarifications
+
+Answers from Danny to questions raised while assigning IDs. They refine the original text above without changing it.
+
+| ID | Requirement | Clarification | Source | Date |
+| --- | --- | --- | --- | --- |
+| CL-01 | REQ-03 | No "current project" is stored. Each command resolves the project from `project@task`, or from the directory it runs in (the project's repo or one of its worktrees). | P01b | 2026-11-13 |
+| CL-02 | REQ-04 | The default branch name is `<prefix><task>`. The prefix is configured per project and defaults to `feat/`. A `--branch <full name>` flag sets a different branch name. | P01b | 2026-11-13 |
+| CL-03 | REQ-07 | A worktree is not removed when it is the main worktree, has uncommitted changes, has unpushed commits, or is locked. `--force` skips these checks; in an interactive terminal the user confirms once for the whole list. | P01b | 2026-11-13 |
+| CL-04 | 4.8 (REQ-08) | "workspace\\" means the folder that holds the projects (projects root). "nhánh chỉ định chính để tạo workspace" means the base branch used to create worktrees. | P01b | 2026-11-13 |
+
+The remaining ambiguities were decided by the advisor in [`BD-00-overview.md`](../basic-design/BD-00-overview.md): the base is taken from `origin/<base>`; the worktree path includes the project name; sync means fetch then rebase/merge instead of pull; the "cần tư vấn" part of REQ-06 is answered in BD-00 section 9.
 
 ---
 
