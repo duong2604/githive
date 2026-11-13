@@ -61,7 +61,7 @@ Binary: `githive`. Release packaging also installs `git-hive`, so `git hive <cmd
 
 | Command | Aliases | Purpose |
 | --- | --- | --- |
-| `githive init` | | Setup wizard: projects root, worktrees root, branch prefix, sync strategy |
+| `githive init` | | Setup wizard: projects root, worktrees root, branch prefix |
 | `githive project add <path>` / `list` / `config <p> --base dev` | `hive` | Register repos (repos under projects root are auto-discovered); list shows the base branch, or `NULL` when unset |
 | `githive spawn <target>` | `new`, `create` | Fetch base, create worktree + branch `<prefix><task>`, copy files, run hooks, print the path |
 | `githive swarm ['project@*' \| --all]` | `ls`, `list` | List worktrees: branch, ahead/behind base, dirty, last commit; `--all` lists every registered project (ADR-0003) |
