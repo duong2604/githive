@@ -34,6 +34,7 @@ Do not copy code from other worktree tools. Reading their docs for ideas is fine
 
 ```
 requirements:    docs/requirements/README.md (REQ-xx, NFR-xx)
+product:         docs/product/ui-spec.md — user-facing CLI interface (PO)
 architecture:    docs/basic-design/BD-00-overview.md + docs/basic-design/README.md
 feature designs: docs/basic-design/BD-xx-*.md → docs/detail-design/DD-xx-*.md
 decisions:       docs/adr/
