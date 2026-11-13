@@ -4,7 +4,7 @@ title: PO decisions on the PO-02 report; UI spec Approved
 from: PO
 to: TL
 step: "3"
-status: Running
+status: Done
 branch: docs/po-02-ui-spec
 pr: "#8"
 depends_on: [PO-02]

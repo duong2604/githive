@@ -28,6 +28,7 @@ Mỗi phiên Claude Code chạy đúng một prompt. Đến P05, prompt do cố 
 | P05 | [P05-create-issues-from-dd.md](P05-create-issues-from-dd.md) | Advisor → Agent | 3 | Ready | `docs/issues-from-dd` | — |
 | PO-01 | [PO-01-operating-model.md](PO-01-operating-model.md) | PO → TL | 3 | Done | `chore/po-01-operating-model` / [#7](https://github.com/duong2604/githive/pull/7) (merged) | PO-01-D1…D6 |
 | PO-02 | [PO-02-ui-spec.md](PO-02-ui-spec.md) | PO → TL | 3 | Done | `docs/po-02-ui-spec` / [#8](https://github.com/duong2604/githive/pull/8) (in review) | PO-02-N1…N4, CL-07…CL-10 |
+| PO-02b | [PO-02b-ui-spec-decisions.md](PO-02b-ui-spec-decisions.md) | PO → TL | 3 | Done | `docs/po-02-ui-spec` / [#8](https://github.com/duong2604/githive/pull/8) (in review) | UI-D1…UI-D10 |
 
 ## Quy ước
 

@@ -12,7 +12,7 @@ last_updated: 2026-11-14
 
 ## Current phase
 
-Phase 1 — the documentation baseline and the code skeleton are done (steps 1, 1b, 1c, 1d, 2a). BD-00, BD-03, DD-00, DD-03 and ADR-0004 are Approved and merged (PR #6). PO-01 introduced the PO / TL / Dev operating model and DD-00, DD-03 rev 3 (PR #7, merged). PO-02 adds the CLI UI spec (`docs/product/ui-spec.md`) and CL-07…CL-10 (PR #8, in review). Next step: P05 run by the TL (PO-02-N4): DD-00 and DD-03 rev 4, then issues, then P06.
+Phase 1 — the documentation baseline and the code skeleton are done (steps 1, 1b, 1c, 1d, 2a). BD-00, BD-03, DD-00, DD-03 and ADR-0004 are Approved and merged (PR #6). PO-01 introduced the PO / TL / Dev operating model and DD-00, DD-03 rev 3 (PR #7, merged). PO-02 adds the CLI UI spec (`docs/product/ui-spec.md`) and CL-07…CL-10; PO-02b approves it with PO decisions UI-D1…UI-D10 (PR #8, in review). Next step: P05 run by the TL (PO-02-N4): DD-00 and DD-03 rev 4, then issues, then P06.
 
 ## Scope
 
@@ -39,6 +39,7 @@ From `BD-00-overview.md` section 10 (P01c-D4):
 | 2d-b Apply P04 review: BD/DD rev 2, saved reports (P04b) | Agent | Done | [PR #6](https://github.com/duong2604/githive/pull/6) (merged) | 2026-11-13 |
 | PO-01 PO/TL/Dev operating model, handoff rules, DD-00 and DD-03 rev 3 | TL | Done | [PR #7](https://github.com/duong2604/githive/pull/7) (merged) | 2026-11-14 |
 | PO-02 CLI UI spec, CL-07…CL-10, technical assessment | TL | In review | [PR #8](https://github.com/duong2604/githive/pull/8) | 2026-11-14 |
+| PO-02b UI spec Approved (UI-D1…UI-D10); BD-00 overview rev 4 | TL | In review | [PR #8](https://github.com/duong2604/githive/pull/8) | 2026-11-14 |
 | 3 Issues + implementation for DD-00, DD-03 | TL + Dev | Not started | | |
 
 Prompts for each step: [`docs/prompts/README.md`](prompts/README.md) (one prompt per session).
@@ -80,3 +81,4 @@ Prompts for each step: [`docs/prompts/README.md`](prompts/README.md) (one prompt
 | 2026-11-14 | PO-01: discarded three uncommitted hand-copied files on `main` (DD-00, DD-03, P05; 62 insertions, 12 deletions) with `git restore`, per R1; their DD content re-applied section by section as DD-00, DD-03 rev 3 (PO-01-D1…D6). CLAUDE.md §1, §13–§15 (roles, working agreement, handoff); `docs/templates/HANDOFF-template.md`, `docs/handoff/TL.md`; docs-check accepts PO prompts/reports, FEAT-DD reports, `docs/product/`, rule (h) for `docs/handoff/` | [#7](https://github.com/duong2604/githive/pull/7) | Windows 11 (Git Bash, Go 1.26.5) |
 | 2026-11-14 | PR #7 merged into main (563cf09). Step PO-01 marked Done | — | — |
 | 2026-11-14 | PO-02: `docs/product/ui-spec.md` added (PO text, Markdown structure restored from the paste, wording unchanged); CLAUDE.md §3 references it; CL-07…CL-10; technical assessment of the spec in `docs/reports/PO-02-2026-11-14.md` | [#8](https://github.com/duong2604/githive/pull/8) | Windows 11 (Git Bash, Go 1.26.5) |
+| 2026-11-14 | PO-02b: UI spec Approved with PO decisions UI-D1…UI-D10 (§19, revision history); BD-00 overview rev 4 (project list columns, illustrative examples, retire size, v1 release channels); CLAUDE.md §4 and README: `init` no longer lists sync strategy (UI-D8) | [#8](https://github.com/duong2604/githive/pull/8) | Windows 11 (Git Bash, Go 1.26.5) |
