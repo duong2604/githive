@@ -17,18 +17,19 @@ GitHive gives each parallel AI coding agent (or each human task) its own git wor
 | Command | Aliases | Purpose |
 | --- | --- | --- |
 | `githive init` | | Setup wizard: projects root, worktrees root, branch prefix, sync strategy |
-| `githive project add <path>` / `list` / `config <p> --base dev` | `hive` | Register repos; `list` shows each base branch, or `NULL` when unset |
+| `githive project add <path>` / `list` / `config <p> --base dev` | `hive` | Register repos (repos under projects root are auto-discovered); list shows the base branch, or `NULL` when unset |
 | `githive spawn <target>` | `new`, `create` | Fetch base, create worktree + branch `<prefix><task>`, copy files, run hooks, print the path |
-| `githive swarm [--all]` | `ls`, `list` | List worktrees: branch, ahead/behind base, dirty, last commit |
+| `githive swarm ['project@*' \| --all]` | `ls`, `list` | List worktrees: branch, ahead/behind base, dirty, last commit; `--all` lists every registered project (ADR-0003) |
 | `githive inspect <target>` | | Detailed status of one worktree |
-| `githive sync <target> [--rebase\|--merge] [--dry-run]` | | Fetch base, predict conflicts, then rebase or merge |
-| `githive retire <targets...> [--merged] [--stale 14d] [-i]` | `rm`, `remove` | Safe removal of worktree + local branch |
+| `githive sync <targets...> [--rebase\|--merge] [--dry-run]` | | Fetch base, predict conflicts (`git merge-tree`), then rebase or merge |
+| `githive retire <targets...> [--merged] [--stale 14d] [-i] [--force]` | `rm`, `remove` | Safe removal of worktree + local branch; `--force` skips the CL-03 safety checks |
 | `githive path <target>` | | Print the path (for `cd`) |
+| `githive shell-init` | | Print a shell function for quick `cd` into a worktree (v1) |
 | `githive doctor` | | Environment checks |
 | `githive config get/set` | | Global config |
-| `githive version` | | Print version, commit and build date (available now) |
+| `githive version` | | Print version, commit and build date; `--json` supported (since P02) |
 
-A target is `project@task`; inside a registered repo or one of its worktrees, `task` alone is enough. Every command accepts `--json` and `--yes`. Release packages also install `git-hive`, so `git hive <cmd>` works.
+A target is `project@task`, or just `task` when you run the command inside a registered repo or one of its worktrees. `'project@*'` (quoted in POSIX shells) selects every task of one project for `swarm`, `sync` and `retire`; `swarm --all` lists every registered project. There is no `-p/--project` flag: the project comes from the target or the current directory. Task names are lowercase: `^[a-z0-9][a-z0-9._-]{0,49}$`. See [BD-03](docs/basic-design/BD-03-target.md). Every command accepts `--json` and `--yes`. Release packages also install `git-hive`, so `git hive <cmd>` works.
 
 ## Build
 

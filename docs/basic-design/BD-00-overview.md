@@ -251,7 +251,7 @@ Flag → biến môi trường `GITHIVE_*` → `.git/config` (`githive.*`) → `
 
 Binary tên là `githive`. Gói cài thêm `git-hive`, nên gõ `git hive <lệnh>` cũng được. Có thêm alias ngắn `ghive` hay không là câu hỏi mở, Danny sẽ quyết định.
 
-Mọi lệnh có `--json` và `--yes`. Lệnh nhận task theo cú pháp `project@task`; nếu đang đứng trong repo hoặc worktree của dự án thì chỉ cần `task` (CL-01). `-p/--project` dùng cho các lệnh chạy trên cả một dự án. Gõ `githive` không kèm tham số trong terminal sẽ mở menu tương tác.
+Mọi lệnh có `--json` và `--yes`. Lệnh nhận task theo cú pháp `project@task`; nếu đang đứng trong repo hoặc worktree của dự án thì chỉ cần `task` (CL-01). Không có flag `-p/--project`: dự án được xác định qua target hoặc qua thư mục đang đứng (BD-03, P03-D1). Gõ `githive` không kèm tham số sẽ in help, cho tới khi DD-01 thiết kế menu tương tác (P01d-D3).
 
 | Lệnh | Alias | Requirement | Mô tả |
 | --- | --- | --- | --- |
@@ -262,7 +262,7 @@ Mọi lệnh có `--json` và `--yes`. Lệnh nhận task theo cú pháp `projec
 | `githive project config <p> --base dev [--prefix feat/] [--sync merge]` | `hive config` | REQ-03, REQ-08, NFR-03 | Đặt cấu hình theo dự án. Không truyền `--base` thì tool gợi ý từ `origin/HEAD` và các nhánh `dev`/`develop`/`developer` có trên remote |
 | `githive spawn <project@task> [--base x] [--branch <tên đầy đủ>] [--no-hooks]` | `new`, `create` | REQ-04, NFR-02, CL-02 | Fetch base, tạo worktree và nhánh `<prefix><task>`, chép file, chạy hook, in đường dẫn |
 | `githive spawn <project@task> --from-remote <branch>` | | — | Mở worktree cho một nhánh đã có trên remote (ví dụ để review MR của người khác) |
-| `githive swarm [-p project \| --all]` | `ls`, `list` | REQ-05 | Liệt kê worktree: task, nhánh, ahead/behind so với base, dirty, lần commit cuối |
+| `githive swarm ['project@*' \| --all]` | `ls`, `list` | REQ-05 | Liệt kê worktree: task, nhánh, ahead/behind so với base, dirty, lần commit cuối |
 | `githive inspect <project@task>` | | REQ-05 | Trạng thái chi tiết của một worktree |
 | `githive sync <project@task> [--rebase\|--merge] [--dry-run] [--autostash]` | | REQ-06 | Fetch base, dự đoán conflict, rồi rebase hoặc merge |
 | `githive retire <project@task...> \| 'project@*' [--merged] [--stale 14d] [-i] [--force]` | `rm`, `remove` | REQ-07, CL-03 | Xóa worktree và nhánh local, có kiểm tra an toàn |
@@ -284,7 +284,7 @@ Mọi lệnh có `--json` và `--yes`. Lệnh nhận task theo cú pháp `projec
 
 Từ v0.1.0, exit code và schema của `--json` được coi là API công khai: thay đổi phải được Danny duyệt.
 
-Ví dụ output của `githive swarm -p kirindo`:
+Ví dụ output của `githive swarm 'kirindo@*'`:
 
 ```
 PROJECT kirindo   BASE origin/dev
@@ -403,6 +403,7 @@ Phạm vi MVP ở đây khớp với danh mục BD trong [README.md](README.md).
 | --- | --- |
 | 2026-11-12 | Bản đầu, tên tạm `wtx` (viết trên claude.ai, export sang Markdown ở P01) |
 | 2026-11-13 | Bản 2 (P01c): đổi tên thành GitHive và các lệnh spawn/swarm/inspect/retire, cú pháp `project@task`, `project add` và `extra_projects`, thêm CL-01…04, thêm Worktrunk vào phần định vị, vẽ lại sơ đồ bằng Mermaid, đổi tham chiếu requirement sang mã REQ, cập nhật phạm vi MVP/v1/v2 và câu hỏi mở |
+| 2026-11-13 | Bản 3 (P03): bỏ `-p/--project` (P03-D1); `swarm` nhận `'project@*'` hoặc `--all` (ADR-0003); gõ `githive` không tham số in help (P01d-D3) |
 
 ### Nguồn
 

@@ -19,10 +19,13 @@ Mỗi phiên Claude Code chạy đúng một prompt. Các prompt dưới đây d
 | P00 | [P00-kickoff.md](P00-kickoff.md) | 0 | Ready | — | — |
 | P01 | [P01-normalize-docs.md](P01-normalize-docs.md) | 1 | Done | `docs/normalize-structure` / [#1](https://github.com/duong2604/githive/pull/1) (merged) | — |
 | P01b | [P01b-apply-review-decisions.md](P01b-apply-review-decisions.md) | 1b | Done | `docs/apply-p01-review` / [#3](https://github.com/duong2604/githive/pull/3) (merged) | P01b-D1…D7, CL-01…04 |
-| P01c | [P01c-refresh-bd-00-overview.md](P01c-refresh-bd-00-overview.md) | 1c | Done | `docs/refresh-bd-00` / [#5](https://github.com/duong2604/githive/pull/5) (in review) | P01c-D1…D4 |
-| P01d | [P01d-apply-p01c-review.md](P01d-apply-p01c-review.md) | 1d | Done | `docs/refresh-bd-00` / [#5](https://github.com/duong2604/githive/pull/5) (in review) | P01d-D1…D7 |
+| P01c | [P01c-refresh-bd-00-overview.md](P01c-refresh-bd-00-overview.md) | 1c | Done | `docs/refresh-bd-00` / [#5](https://github.com/duong2604/githive/pull/5) (merged) | P01c-D1…D4 |
+| P01d | [P01d-apply-p01c-review.md](P01d-apply-p01c-review.md) | 1d | Done | `docs/refresh-bd-00` / [#5](https://github.com/duong2604/githive/pull/5) (merged) | P01d-D1…D7 |
 | P02 | [P02-bootstrap-project.md](P02-bootstrap-project.md) | 2a | Done | `chore/bootstrap` / [#4](https://github.com/duong2604/githive/pull/4) (merged) | P02-D1…D4 |
-| P03 | [P03-create-issues-from-dd.md](P03-create-issues-from-dd.md) | 3 | Ready | `docs/issues-from-dd` | — |
+| P03 | [P03-add-bd-00-and-bd-03.md](P03-add-bd-00-and-bd-03.md) | 2b | Done | `docs/bd-00-03` / [#6](https://github.com/duong2604/githive/pull/6) (in review) | P03-D1…D4 |
+| P04 | [P04-approve-bd-add-dd-00-03.md](P04-approve-bd-add-dd-00-03.md) | 2d | Done | `docs/bd-00-03` / [#6](https://github.com/duong2604/githive/pull/6) (in review) | P04-D1…D8, CL-05, CL-06 |
+| P04b | [P04b-apply-p04-review.md](P04b-apply-p04-review.md) | 2d | Done | `docs/bd-00-03` / [#6](https://github.com/duong2604/githive/pull/6) (in review) | P04b-D1…D11 |
+| P05 | [P05-create-issues-from-dd.md](P05-create-issues-from-dd.md) | 3 | Ready | `docs/issues-from-dd` | — |
 
 ## Quy ước
 
@@ -35,6 +38,7 @@ Mỗi phiên Claude Code chạy đúng một prompt. Các prompt dưới đây d
 - **Prompt đã chạy thì không sửa nội dung.** Muốn thay đổi thì tạo prompt mới với chữ cái kế tiếp.
 - **`Done` nghĩa là phiên đã chạy xong (P02-D1).** PR đã merge hay chưa thì xem cột Nhánh / PR (`(in review)` hoặc `(merged)`); không thêm trạng thái mới.
 - **Sửa prompt đã chạy (P02-D2):** chỉ được sửa `status`, `branch` và `pr` trong front matter; nội dung giữ nguyên.
+- **Báo cáo (P04b-D10):** mỗi phiên lưu báo cáo §13 vào `docs/reports/<ID prompt>-<YYYY-MM-DD>.md` (thêm `-2`, `-3`… nếu cùng prompt chạy nhiều phiên trong một ngày), commit cùng PR trước khi in ra chat; docs-check quy tắc (g) kiểm tên file.
 - **Vai trò:** quyết định kỹ thuật do cố vấn đưa ra, câu hỏi requirement do Danny trả lời (xem `CLAUDE.md` §13).
 
 ## Vòng lặp

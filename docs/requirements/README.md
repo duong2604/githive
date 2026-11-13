@@ -44,6 +44,8 @@ Answers from Danny to questions raised while assigning IDs. They refine the orig
 | CL-02 | REQ-04 | The default branch name is `<prefix><task>`. The prefix is configured per project and defaults to `feat/`. A `--branch <full name>` flag sets a different branch name. | P01b | 2026-11-13 |
 | CL-03 | REQ-07 | A worktree is not removed when it is the main worktree, has uncommitted changes, has unpushed commits, or is locked. `--force` skips these checks; in an interactive terminal the user confirms once for the whole list. | P01b | 2026-11-13 |
 | CL-04 | 4.8 (REQ-08) | "workspace\\" means the folder that holds the projects (projects root). "nhánh chỉ định chính để tạo workspace" means the base branch used to create worktrees. | P01b | 2026-11-13 |
+| CL-05 | NFR-05 | CLI output, help text and error messages are in English only. | P04 | 2026-11-13 |
+| CL-06 | REQ-04 | Task names are lowercase only. A different branch name, including one with upper-case letters, is set with `--branch`. | P04 | 2026-11-13 |
 
 The remaining ambiguities were decided by the advisor in [`BD-00-overview.md`](../basic-design/BD-00-overview.md): the base is taken from `origin/<base>`; the worktree path includes the project name; sync means fetch then rebase/merge instead of pull; the "cần tư vấn" part of REQ-06 is answered in BD-00 section 9.
 
@@ -75,17 +77,17 @@ The remaining ambiguities were decided by the advisor in [`BD-00-overview.md`](.
 | --- | --- | --- | --- | --- |
 | REQ-01 | BD-01 | DD-01 | — | Not started |
 | REQ-02 | BD-01 | DD-01 | — | Not started |
-| REQ-03 | BD-02 | DD-02 | — | Not started |
-| REQ-04 | BD-04, BD-03 | DD-04, DD-03 | — | Not started |
-| REQ-05 | BD-05 | DD-05 | — | Not started |
+| REQ-03 | BD-02, BD-03 | DD-02, DD-03 | — | In design |
+| REQ-04 | BD-04, BD-03 | DD-04, DD-03 | — | In design |
+| REQ-05 | BD-05, BD-03 | DD-05, DD-03 | — | In design |
 | REQ-06 | BD-06 | DD-06 | — | Not started |
-| REQ-07 | BD-07 | DD-07 | — | Not started |
+| REQ-07 | BD-07, BD-03 | DD-07, DD-03 | — | In design |
 | REQ-08 | BD-02 | DD-02 | — | Not started |
-| NFR-01 | BD-00, BD-09 | DD-00, DD-09 | — | Not started |
-| NFR-02 | BD-00, BD-04 | DD-00, DD-04 | — | Not started |
+| NFR-01 | BD-00, BD-09 | DD-00, DD-09 | — | In design |
+| NFR-02 | BD-00, BD-04 | DD-00, DD-04 | — | In design |
 | NFR-03 | BD-02 | DD-02 | — | Not started |
 | NFR-04 | BD-01 | DD-01 | — | Not started |
-| NFR-05 | BD-01, BD-00 | DD-01, DD-00 | — | Not started |
+| NFR-05 | BD-01, BD-00 | DD-01, DD-00 | — | In design |
 
 **Not derived from a requirement:** BD-08 (`path`, `shell-init`) has no source requirement. It comes from the design, so that an agent or user can move into a worktree (`cd "$(githive path <target>)"`).
 

@@ -9,7 +9,8 @@
 //	c) BD/DD file names match nameRe, except BD-00-overview.md;
 //	d) .md files in docs/ and at the repository root are UTF-8 without CRLF (P01b-D3);
 //	e) every front matter last_updated is a valid YYYY-MM-DD date (P01b-D5);
-//	f) docs/prompts/ files except README.md match promptNameRe and have prompt front matter (P01b-D7).
+//	f) docs/prompts/ files except README.md match promptNameRe and have prompt front matter (P01b-D7);
+//	g) docs/reports/ files match reportNameRe with a valid date; no front matter required (P04b-D10).
 //
 // Size (P02-D3): there is no fixed line limit. When this file grows past about
 // 250 lines, split it into several files in this package (e.g. rules.go,
@@ -38,6 +39,7 @@ type schema struct {
 var (
 	nameRe       = regexp.MustCompile(`^(BD|DD)-\d{2}-[a-z0-9-]+\.md$`)
 	promptNameRe = regexp.MustCompile(`^P\d{2}[a-z]?-[a-z0-9-]+\.md$`)
+	reportNameRe = regexp.MustCompile(`^P\d{2}[a-z]?-(\d{4}-\d{2}-\d{2})(-\d+)?\.md$`)
 	dateRe       = regexp.MustCompile(`^\d{4}-\d{2}-\d{2}$`)
 	nonEmpty     = map[string]bool{"id": true, "title": true, "status": true}
 	docFields    = []string{"id", "title", "status", "req", "depends_on", "owner", "last_updated"}
@@ -119,6 +121,14 @@ func check(root string) ([]string, error) {
 		}
 		if isPrompt && !promptNameRe.MatchString(name) {
 			add(rel, "prompt file name must match %s", promptNameRe)
+		}
+		if path.Dir(rel) == "docs/reports" { // rule g
+			m := reportNameRe.FindStringSubmatch(name)
+			if m == nil {
+				add(rel, "report file name must match %s", reportNameRe)
+			} else if _, err := time.Parse("2006-01-02", m[1]); err != nil {
+				add(rel, "report date %q is not a valid YYYY-MM-DD date", m[1])
+			}
 		}
 		var msgs []string
 		switch {

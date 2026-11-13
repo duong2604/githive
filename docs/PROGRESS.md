@@ -12,7 +12,7 @@ last_updated: 2026-11-13
 
 ## Current phase
 
-Phase 1 — the documentation baseline and the code skeleton are done (steps 1, 1b, 2a; 1c and 1d in review in PR #5). Next step: 2b (BD-00-foundation, BD-03 → DD-00, DD-03).
+Phase 1 — the documentation baseline and the code skeleton are done (steps 1, 1b, 1c, 1d, 2a). BD-00, BD-03, DD-00, DD-03 and ADR-0004 are Approved (rev 2 since P04b) and wait for PR #6 to be merged (steps 2d, 2d-b). Next step: P05 (create issues from DD-00 and DD-03).
 
 ## Scope
 
@@ -30,10 +30,13 @@ From `BD-00-overview.md` section 10 (P01c-D4):
 | --- | --- | --- | --- | --- |
 | 1 Normalize documentation structure | Agent | Done | [PR #1](https://github.com/duong2604/githive/pull/1) | 2026-11-13 |
 | 1b Apply P01 review decisions (P01b) | Agent | Done | [PR #3](https://github.com/duong2604/githive/pull/3) (merged) | 2026-11-13 |
-| 1c Refresh BD-00 overview (P01c) | Agent | In review | [PR #5](https://github.com/duong2604/githive/pull/5) | 2026-11-13 |
-| 1d Rebase on bootstrap, apply P01c review (P01d) | Agent | In review | [PR #5](https://github.com/duong2604/githive/pull/5) | 2026-11-13 |
+| 1c Refresh BD-00 overview (P01c) | Agent | Done | [PR #5](https://github.com/duong2604/githive/pull/5) (merged) | 2026-11-13 |
+| 1d Rebase on bootstrap, apply P01c review (P01d) | Agent | Done | [PR #5](https://github.com/duong2604/githive/pull/5) (merged) | 2026-11-13 |
 | 2a Bootstrap project (P02, runs P00 part B steps 0–2) | Agent | Done | [PR #4](https://github.com/duong2604/githive/pull/4) (merged) | 2026-11-13 |
-| 2b BD-00, BD-03 → DD-00, DD-03 approved | Advisor + Danny | Not started | | |
+| 2b Add BD-00-foundation and BD-03 for review (P03) | Agent | Done | [PR #6](https://github.com/duong2604/githive/pull/6) | 2026-11-13 |
+| 2c Review BD-00 and BD-03; write DD-00, DD-03 and ADR-0004 | Advisor + Danny | Done | P04 decisions, CL-05, CL-06 | 2026-11-13 |
+| 2d Approve BD-00, BD-03; add DD-00, DD-03, ADR-0004 (P04) | Agent | In review | [PR #6](https://github.com/duong2604/githive/pull/6) | 2026-11-13 |
+| 2d-b Apply P04 review: BD/DD rev 2, saved reports (P04b) | Agent | In review | [PR #6](https://github.com/duong2604/githive/pull/6) | 2026-11-13 |
 | 3 Issues + implementation for DD-00, DD-03 | Agent | Not started | | |
 
 Prompts for each step: [`docs/prompts/README.md`](prompts/README.md) (one prompt per session).
@@ -66,3 +69,8 @@ Prompts for each step: [`docs/prompts/README.md`](prompts/README.md) (one prompt
 | 2026-11-13 | P02: Go module, `githive version` + `--json`, `internal/testutil`, CI (3 OS + docs-check + goreleaser check), GoReleaser config, MIT license, README/CONTRIBUTING/CHANGELOG, ADR-0001/0002; docs-check merged into the root module | [#4](https://github.com/duong2604/githive/pull/4) | Windows 11 locally; CI green on ubuntu, windows, macos |
 | 2026-11-13 | P01c: BD-00 overview revision 2 committed verbatim; wtx naming map dropped; `extra_projects` in CLAUDE.md §5; Scope section; consistency pass (mismatches reported, not changed) | [#5](https://github.com/duong2604/githive/pull/5) | Windows 11 (Git Bash, Go 1.26.5) |
 | 2026-11-13 | P01d: PR #5 rebased on main after PR #4; ADR-0003 (`--all`, `project@*`); CLAUDE.md §4 (version, shell-init, retire --force, bare `githive` prints help) and §5 key naming; BD-00 overview vs foundation note; v1 zip note | [#5](https://github.com/duong2604/githive/pull/5) | Windows 11 (Git Bash, Go 1.26.5) |
+| 2026-11-13 | PR #5 merged into main (62dd4b1). Steps 1c and 1d marked Done | — | — |
+| 2026-11-13 | P03: BD-00-foundation and BD-03 (In review) and BD-00 overview revision 3 committed verbatim; CLAUDE.md §4 drops `-p/--project` and lists global flags (P03-D1); README command table synced (P03-D2); issue prompt renumbered to P05 (P03-D4); traceability set to In design | [#6](https://github.com/duong2604/githive/pull/6) | WSL Ubuntu 24.04 (Go 1.26.5) |
+| 2026-11-13 | P04: BD-00 and BD-03 Approved; DD-00, DD-03 and ADR-0004 added verbatim; CL-05, CL-06; CLAUDE.md §4–§5 and BD index updated (P04-D5…D7); P05 prompt renumbered and sliced (P04-D8) | [#6](https://github.com/duong2604/githive/pull/6) | WSL Ubuntu 24.04 (Go 1.26.5) |
+| 2026-11-13 | The original P04 report (WSL work laptop) was lost when switching machines; it was reconstructed from the branch on the Windows laptop and saved as [docs/reports/P04-2026-11-13.md](reports/P04-2026-11-13.md) | — | Windows 11 |
+| 2026-11-13 | P04b: BD-00, BD-03, DD-00, DD-03 rev 2 committed verbatim (P04b-D1…D6); README `sync <targets...>` (D7); CLAUDE.md §5 lock scope adds `git config --local` (D8); PR #6 body updated (D9); session reports saved in `docs/reports/`, CLAUDE.md §13 and docs-check rule (g) (D10); P05 plans five issues and prompts P06…P10 (D11) | [#6](https://github.com/duong2604/githive/pull/6) | Windows 11 (Git Bash, Go 1.26.5) |

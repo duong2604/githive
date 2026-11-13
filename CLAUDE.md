@@ -62,7 +62,7 @@ Binary: `githive`. Release packaging also installs `git-hive`, so `git hive <cmd
 | `githive spawn <target>` | `new`, `create` | Fetch base, create worktree + branch `<prefix><task>`, copy files, run hooks, print the path |
 | `githive swarm ['project@*' \| --all]` | `ls`, `list` | List worktrees: branch, ahead/behind base, dirty, last commit; `--all` lists every registered project (ADR-0003) |
 | `githive inspect <target>` | | Detailed status of one worktree |
-| `githive sync <target> [--rebase\|--merge] [--dry-run]` | | Fetch base, predict conflicts (`git merge-tree`), then rebase or merge |
+| `githive sync <targets...> [--rebase\|--merge] [--dry-run]` | | Fetch base, predict conflicts (`git merge-tree`), then rebase or merge |
 | `githive retire <targets...> [--merged] [--stale 14d] [-i] [--force]` | `rm`, `remove` | Safe removal of worktree + local branch; `--force` skips the CL-03 safety checks |
 | `githive path <target>` | | Print the path (for `cd`) |
 | `githive shell-init` | | Print a shell function for quick `cd` into a worktree (v1) |
@@ -70,11 +70,13 @@ Binary: `githive`. Release packaging also installs `git-hive`, so `git hive <cmd
 | `githive config get/set` | | Global config |
 | `githive version` | | Print version, commit and build date; `--json` supported (since P02) |
 
-**Target grammar:** `project@task`. Inside a registered repo or one of its worktrees, `task` alone is enough. `'project@*'` (quote it in shells) selects every task of one project for `swarm`, `sync` and `retire`; `swarm --all` lists every registered project; `-p project --all` is not used (ADR-0003). Task names must match `^[a-z0-9][a-z0-9._-]{0,49}$` (no `@`, no `/`) and also pass `git check-ref-format --branch`. The grammar must never need a leading `@`, because PowerShell treats a leading `@` as splatting.
+**Target grammar:** `project@task`. Inside a registered repo or one of its worktrees, `task` alone is enough. `'project@*'` (quote it in shells) selects every task of one project for `swarm`, `sync` and `retire`; `swarm --all` lists every registered project; `-p project --all` is not used (ADR-0003). Task names must match `^[a-z0-9][a-z0-9._-]{0,49}$` (no `@`, no `/`) and also pass `git check-ref-format --branch`. The grammar must never need a leading `@`, because PowerShell treats a leading `@` as splatting. `-p/--project` does not exist; the project comes from the target or the current directory (BD-03, P03-D1).
+
+Global flags: --json, --yes/-y, --verbose/-v, --no-color, --help (BD-00 §3.1). With --json, stdout holds one envelope {ok, command, data, error, warnings} (BD-00 §3.3, ADR-0004).
 
 Running `githive` with no arguments prints help until DD-01 designs the interactive menu (P01d-D3).
 
-Every command accepts `--json` and `--yes` and never blocks waiting for input when stdin is not a TTY. Exit codes: 0 ok, 1 error, 2 bad args/missing config, 3 sync conflict (aborted cleanly), 4 blocked by a safety check, 5 lock timeout. `--json` schemas and exit codes are a public API: changing them after v0.1.0 needs Danny's approval.
+Every command accepts `--json` and `--yes` and never blocks waiting for input when stdin is not a TTY. Exit codes: 0 ok, 1 error, 2 bad args/missing config, 3 sync conflict (aborted cleanly), 4 blocked by a safety check, 5 lock timeout, 130 interrupted. `--json` schemas and exit codes are a public API: changing them after v0.1.0 needs Danny's approval.
 
 ## 5. Key technical decisions
 
@@ -83,17 +85,18 @@ Every command accepts `--json` and `--yes` and never blocks waiting for input wh
 - **Git is the source of truth** for worktrees (`git worktree list --porcelain -z`). No state database.
 - **Config, two layers:** global TOML at `%APPDATA%\githive\config.toml` (Windows) or `$XDG_CONFIG_HOME/githive/config.toml` (default `~/.config/...`); per-repo settings in `git config --local githive.*`. Write files atomically (temp file, then rename). The global key `extra_projects` lists repos outside `projects_root` registered with `githive project add` (P01c-D3). Key naming (P01d-D5): TOML keys use snake_case (`post_create`, `copy_files`); git config keys use camelCase under `githive.*` (`githive.postCreate`, `githive.copyFiles`).
 - **Precedence:** flag > `GITHIVE_*` env > repo git config > global config > defaults.
-- **Locking:** the `githive.lock` file in `git rev-parse --git-common-dir`, held only around fetch / worktree add / remove / branch delete. 30 s timeout.
+- **Locking:** the `githive.lock` file in `git rev-parse --git-common-dir`, held only around fetch / worktree add / remove / branch delete / `git config --local` writes. 30 s timeout, overridable with `GITHIVE_LOCK_TIMEOUT` (seconds). The holder's command, pid, host and start time go in a separate `githive.lock.info` file next to it (ADR-0004).
 - **Paths:** worktrees live at `<worktrees_root>/<project>/<task>`; the default `worktrees_root` is `<projects_root>/worktrees`. Never put worktrees inside the repo. Use `filepath` everywhere and never hand-build separators.
 - **Spawn:** `git fetch <remote> <base> --prune`, then `git worktree add --no-track -b <prefix><task> <path> <remote>/<base>`. Roll back on failure.
 - **Retire:** use `git worktree remove` + `git branch -d`, never raw recursive deletes. Before removing, refuse when the worktree is the main one, dirty, has unpushed commits, or is locked. Detect "merged" by ancestry first; otherwise treat a remote branch that has disappeared as merged.
 
-Default dependencies (anything else → ask first): `spf13/cobra`, `charmbracelet/huh`, `charmbracelet/lipgloss`, `pelletier/go-toml/v2`, `gofrs/flock`, `rogpeppe/go-internal/testscript` (tests), `stretchr/testify` (tests).
+Default dependencies (anything else → ask first): `spf13/cobra`, `charmbracelet/huh`, `charmbracelet/lipgloss`, `pelletier/go-toml/v2`, `gofrs/flock`, `golang.org/x/term`, `rogpeppe/go-internal/testscript` (tests), `stretchr/testify` (tests).
 
 Layout:
 ```
 cmd/githive/            main.go
 internal/cli/           cobra commands only: parse flags, call services, render
+internal/apperr/        errors: Error type, code catalogue, exit codes
 internal/ui/            prompts, tables, JSON output
 internal/service/       project, worktree, sync, cleanup (no terminal I/O)
 internal/git/           runner, porcelain parsers, status
@@ -200,3 +203,5 @@ End every session with a report to Danny in Vietnamese, at most ~40 lines, using
 
 Routing: technical questions (architecture, libraries, git behaviour, file formats, conventions) are decided by the advisor; Danny only reviews. Questions about requirements and product behaviour (what the user sees, defaults, safety policy, naming) are answered by Danny. When unsure which kind, put it under 5. Do not block on a question if a reversible default exists: use it, list it, continue.
 Every prompt lives in docs/prompts/ with an ID (see docs/prompts/README.md). Decisions are cited by full ID (e.g. P01b-D5); requirement clarifications by CL-xx. Update docs/PROGRESS.md and docs/prompts/README.md before writing the report.
+
+Before printing the report, save it as docs/reports/<prompt ID>-<YYYY-MM-DD>.md (add -2, -3… for more sessions of the same prompt on one day) and commit it with the session's other changes, so any machine can read it after git pull (P04b-D10).
