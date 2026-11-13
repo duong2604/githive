@@ -14,7 +14,16 @@ last_updated: 2026-11-13
 
 Implements [BD-03](../basic-design/BD-03-target.md), rules BR-01 … BR-11. It provides a pure parser and a resolver that later commands (spawn, swarm, inspect, sync, retire, path) call.
 
-The resolver does not know where projects and tasks come from. It depends on two small interfaces (§3.3), implemented later by the project registry (DD-02) and the worktree service (DD-04/DD-05). Until those exist, tests use fakes, so this DD can be built in parallel with DD-00b and DD-00c once DD-00a is merged.
+The resolver does not know where projects and tasks come from. It depends on two small interfaces (§3.3), implemented later by the project registry (DD-02) and the worktree service (DD-04/DD-05). Until those exist, tests use fakes.
+
+### Implementation slices (one issue each)
+
+| Slice | Contents | Depends on | Test cases |
+| --- | --- | --- | --- |
+| DD-03a | `parse.go`, `resolve.go`, `spec.go`, `distance.go`; the resolver tested with fake sources, locator and prompter | DD-00a | TC-01 … TC-13, TC-19 … TC-22 |
+| DD-03b | `locator.go` (`gitLocator` on `git.Runner`) and the integration tests with real repositories | DD-00b, DD-03a | TC-14 … TC-18 |
+
+DD-03a runs in parallel with DD-00b and DD-00c.
 
 Deferred elsewhere:
 - Checking `<prefix><task>` with `git check-ref-format --branch`: DD-04 (`spawn`), because the prefix comes from project config.
@@ -29,6 +38,7 @@ Deferred elsewhere:
 | `internal/target/resolve.go` | `Resolver`, `Spec`, `Resolved`; current-directory lookup; closest-name hints |
 | `internal/target/spec.go` | One `Spec` value per command (§3.4) |
 | `internal/target/distance.go` | Levenshtein distance for "did you mean" (about 25 lines, no dependency) |
+| `internal/target/locator.go` | `gitLocator`, the default `Locator` on DD-00's `git.Runner` (slice DD-03b) |
 
 ## 3. Types & interfaces
 
@@ -127,18 +137,19 @@ const (
 
 type Spec struct {
     Implicit      Implicit
+    AllowTask     bool // project@task and bare task forms
     AllowWildcard bool // project@*
     AllowMultiple bool
     MustExist     bool // false for spawn
 }
 
 var (
-    SpecSpawn   = Spec{Implicit: ImplicitNone, MustExist: false}
-    SpecInspect = Spec{Implicit: ImplicitTask, MustExist: true}
-    SpecPath    = Spec{Implicit: ImplicitTask, MustExist: true}
-    SpecSync    = Spec{Implicit: ImplicitTask, AllowWildcard: true, AllowMultiple: true, MustExist: true}
-    SpecRetire  = Spec{Implicit: ImplicitNone, AllowWildcard: true, AllowMultiple: true, MustExist: true}
-    SpecSwarm   = Spec{Implicit: ImplicitProject, AllowWildcard: true}
+    SpecSpawn   = Spec{Implicit: ImplicitNone, AllowTask: true, MustExist: false}
+    SpecInspect = Spec{Implicit: ImplicitTask, AllowTask: true, MustExist: true}
+    SpecPath    = Spec{Implicit: ImplicitTask, AllowTask: true, MustExist: true}
+    SpecSync    = Spec{Implicit: ImplicitTask, AllowTask: true, AllowWildcard: true, AllowMultiple: true, MustExist: true}
+    SpecRetire  = Spec{Implicit: ImplicitNone, AllowTask: true, AllowWildcard: true, AllowMultiple: true, MustExist: true}
+    SpecSwarm   = Spec{Implicit: ImplicitProject, AllowWildcard: true} // AllowTask false: swarm takes 'project@*' or --all
 )
 ```
 
@@ -194,19 +205,19 @@ Examples: `Task_18` → `task_18`; `Fix Login` → `fix-login`; `API--M018` → 
 
 1. **No args:**
    - `ImplicitNone` → `input_required` `a target is required, like kirindo@task-18`; in interactive mode, ask with `Prompt.Input` instead.
-   - `ImplicitTask` → `current(ctx)` must return a project and a task. When it finds a project but no task (the user is in the main repo), or nothing at all → `input_required` (`not inside a task worktree; pass a target like <project>@<task>`), or in interactive mode `Prompt.Select` from that project's tasks.
-   - `ImplicitProject` → `current(ctx)` must return a project, else `input_required` `not inside a project; use 'project@*' or --all`. Returns one `Resolved` with `Task: ""`.
+   - `ImplicitTask` → `current(ctx)` must return a project and a task. When it finds a project but no task (the user is in the main repo) → `input_required` (`not inside a task worktree; pass a target like <project>@<task>`), or in interactive mode `Prompt.Select` from that project's tasks. When it finds nothing at all → `input_required`, or in interactive mode `Prompt.Select` from the registered projects, then from that project's tasks.
+   - `ImplicitProject` → `current(ctx)` must return a project, else `input_required` `not inside a project; use 'project@*' or --all`, or in interactive mode `Prompt.Select` from the registered projects. Returns one `Resolved` with `Task: ""`.
 2. **Several args** when `!AllowMultiple` → `usage` `this command takes one target`.
-3. For each arg: `Parse`. If `All` and `!AllowWildcard` → `invalid_target` `<cmd> does not accept project@*`.
+3. For each arg: `Parse`. If `All` and `!AllowWildcard` → `invalid_target` `<cmd> does not accept project@*`. If `!All` and `!AllowTask` → `invalid_target` `<cmd> takes 'project@*' or --all, not a single task`.
 4. **Project lookup:**
-   - `Project == ""` → use the project from `current(ctx)`; if none → `input_required` `"<task>" has no project here; use <project>@<task>`.
+   - `Project == ""` → use the project from `current(ctx)`; if none → `input_required` `"<task>" has no project here; use <project>@<task>`, or in interactive mode `Prompt.Select` from the registered projects (BD-03 §5).
    - Otherwise find a registered project with `strings.EqualFold(name, p.Name)`. Not found → `project_not_found` `project "<p>" not found`, hint `did you mean "<a>", "<b>"? Registered projects: githive project list` (up to 3 names with distance ≤ 3, case-insensitive; omit "did you mean" when none).
 5. **Task lookup:**
    - `All` → `Tasks.Tasks(p)`; one `Resolved` per task, sorted by name. An empty list is valid.
    - Otherwise `Exists = task ∈ Tasks.Tasks(p)`. If `MustExist && !Exists` → `task_not_found` `task "<t>" not found in project "<p>"`, hint with up to 3 close names.
 6. `Path = filepath.Join(p.TasksDir, task)`.
 7. **Duplicates:** drop a `Resolved` whose `(Project.Name, Task)` was already seen; keep first-seen order (BR-10).
-8. **Warnings:** for every distinct project, append `platform.RepoWarnings(p.Path)`. Resolve returns them as its second result (§3.3).
+8. **Warnings:** for every distinct project whose `platform.UnderMnt(p.Path)` is true, append `ui.Warning{Code: "repo_on_mnt", Message: "repository <p.Path> is under /mnt; git is slow there, clone it inside WSL instead"}`. Resolve returns them as its second result (§3.3). `internal/platform` stays free of `internal/ui` (DD-00 §3.6).
 
 ### 5.5 `current(ctx)`
 
@@ -235,7 +246,7 @@ None. Resolution only reads: git `rev-parse`, the project list and directory lis
 ## 8. Platform specifics
 
 - **Windows:** `os.SameFile` compares volume serial and file index, so `D:\Workspace\kirindo\.git` and `d:/workspace/kirindo/.git` match. Project names are compared with `strings.EqualFold`.
-- **WSL:** `/mnt/d/workspace/kirindo` (Windows-side clone) and `~/workspace/kirindo` are different repositories and never match. `RepoWarnings` adds `repo_on_mnt` for the first.
+- **WSL:** `/mnt/d/workspace/kirindo` (Windows-side clone) and `~/workspace/kirindo` are different repositories and never match. Resolution adds a `repo_on_mnt` warning for the first (§5.4 step 8).
 - **macOS:** `os.SameFile` avoids comparing Unicode forms of path names. Project names are ASCII only (§3.1), so they need no normalisation.
 - **Linux:** none.
 
@@ -262,18 +273,30 @@ None. Resolution only reads: git `rev-parse`, the project list and directory lis
 | TC-17 | Cwd = a subdirectory deep inside the worktree → still resolves the task | integration | all |
 | TC-18 | Windows: project `CommonDir` registered with different case and `/` separators still matches (SameFile) | integration | windows |
 | TC-19 | Interactive resolver (fake Prompter) with no args in the main repo and SpecInspect → `Select` is offered the project's tasks; the chosen task is resolved | unit | all |
-| TC-20 | `RepoWarnings` hook forced to true → Resolve returns one `repo_on_mnt` warning per distinct project | unit | all |
+| TC-20 | `UnderMnt` hook forced to true → Resolve returns one `repo_on_mnt` warning per distinct project | unit | all |
+| TC-21 | Interactive resolver (fake Prompter), Cwd outside any project, bare `task-18` → `Select` is offered the registered projects; the chosen project is used | unit | all |
+| TC-22 | SpecSwarm with `kirindo@task-18` → `invalid_target` naming `'project@*'` and `--all`; with `kirindo@*` → ok | unit | all |
 
 ## 10. Acceptance criteria
 
 - [ ] All three target forms parse, and every invalid form is rejected with `invalid_target` (TC-01, TC-02).
 - [ ] Task name rules and suggestions follow BD-03 §3.3 and CL-06 (TC-03, TC-04).
 - [ ] Project lookup is case-insensitive with "did you mean" hints (TC-06, TC-07).
-- [ ] Each command's allowed forms match BD-03 §3.2 (TC-08 … TC-13, TC-19).
+- [ ] Each command's allowed forms match BD-03 §3.2 (TC-08 … TC-13, TC-22).
+- [ ] In interactive mode a missing project or task is picked from a list, as BD-03 §5 requires (TC-19, TC-21).
 - [ ] The current project and task are found from the current directory, including subdirectories and Windows path variants (TC-14 … TC-18).
 - [ ] WSL `/mnt` warnings are attached once per project (TC-20).
-- [ ] No I/O in `parse.go`; `go test ./internal/target/...` passes without git for TC-01 … TC-13, TC-19, TC-20.
+- [ ] No I/O in `parse.go`; slice DD-03a passes `go test ./internal/target/...` without git (TC-01 … TC-13, TC-19 … TC-22).
 
 ## 11. Open questions
 
 - None block implementation. `project add --name` (DD-02) and external worktrees (DD-05) only add data behind the interfaces in §3.3.
+
+Coverage deferred to later DDs: BR-05 "two projects may not differ only in case" is enforced at registration (DD-02); BR-09 external worktrees are listed by `swarm` (DD-05); BR-11 quoting is a documentation rule with no test case.
+
+## Revision history
+
+| Date | Change |
+| --- | --- |
+| 2026-11-13 | Approved (P04) |
+| 2026-11-13 | Rev 2 (P04b): split into DD-03a/DD-03b; `Spec.AllowTask` so `swarm` rejects single tasks; interactive project picking per BD-03 §5; `repo_on_mnt` warning built here instead of in `platform`; TC-21, TC-22 added |

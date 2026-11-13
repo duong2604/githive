@@ -15,7 +15,7 @@ last_updated: 2026-11-13
 Implements [BD-00](../basic-design/BD-00-foundation.md), rules BR-01 … BR-13. It changes the existing `internal/cli` root from P02 and adds the packages every later DD builds on.
 
 Deferred elsewhere:
-- WSL `repo_on_mnt` warning: the helper is here (§3.6); it is emitted by target resolution (DD-03).
+- WSL `repo_on_mnt` warning: `platform.UnderMnt` is here (§3.6); the warning itself is built by target resolution (DD-03), so `internal/platform` never imports `internal/ui`.
 - Interactive prompts for missing values: the `Mode` decision is here; each command asks through `ui.Prompter` (§3.3) in its own DD.
 - Windows console code page: `doctor` (DD-09) reports it; no change at start-up.
 
@@ -23,11 +23,11 @@ Deferred elsewhere:
 
 | Slice | Contents | Depends on | Size |
 | --- | --- | --- | --- |
-| DD-00a | `internal/apperr`, `internal/ui` (envelope, printer, mode), changes to `internal/cli` and `cmd/githive` | — | ~350 lines incl. tests |
+| DD-00a | `internal/apperr`, `internal/ui` (envelope, printer, mode, prompter), `internal/platform` (term, wsl, paths), changes to `internal/cli` and `cmd/githive` | — | ~450 lines incl. tests |
 | DD-00b | `internal/git` runner and version check | DD-00a | ~300 lines |
 | DD-00c | `internal/lock` | DD-00a | ~250 lines |
 
-After DD-00a is merged, DD-00b, DD-00c and DD-03 can run in parallel; they touch different packages.
+After DD-00a is merged, DD-00b, DD-00c and DD-03a can run in parallel; they touch different packages. DD-03b needs DD-00b (see DD-03 §1).
 
 ## 2. Packages & files
 
@@ -47,6 +47,7 @@ After DD-00a is merged, DD-00b, DD-00c and DD-03 can run in parallel; they touch
 | `internal/lock/lock.go` | Repository lock on `githive.lock` with holder file `githive.lock.info` |
 | `internal/platform/term.go` | `IsTerminal(*os.File)` via `golang.org/x/term` |
 | `internal/platform/wsl.go` | `IsWSL()`, `UnderMnt(path)` |
+| `internal/platform/paths.go` | `NativeAbs(path)`: absolute, cleaned, OS-native separators (BR-11) |
 
 New dependencies (ADR-0004): `golang.org/x/term`, `github.com/gofrs/flock`, `github.com/charmbracelet/huh`. The last two are already on the default list in CLAUDE.md §5.
 
@@ -245,8 +246,10 @@ func With(ctx context.Context, commonDir string, opt Options, fn func() error) e
 func IsTerminal(f *os.File) bool        // golang.org/x/term
 func IsWSL() bool                       // WSL_DISTRO_NAME set, or /proc/sys/kernel/osrelease contains "microsoft" (case-insensitive)
 func UnderMnt(path string) bool         // IsWSL() && path matches ^/mnt/[a-z]/
-func RepoWarnings(repoPath string) []ui.Warning // [{repo_on_mnt, …}] when UnderMnt
+func NativeAbs(path string) (string, error) // filepath.Abs + filepath.Clean; used for every path printed or put in JSON (BR-11)
 ```
+
+`internal/platform` imports only the standard library and `golang.org/x/term`; it never imports `internal/ui` or `internal/apperr`.
 
 ## 4. Config keys / JSON output schema
 
@@ -374,6 +377,8 @@ The CLI prints the wait message on stderr, in text mode only: `waiting for <comm
 | TC-24 | Different common dirs lock independently (both acquire at once) | integration | all |
 | TC-25 | `UnderMnt` with `IsWSL` forced true: `/mnt/c/x` → true, `/mnt/data/x` → false, `/home/x` → false | unit | all |
 | TC-26 | `NoPrompter(false).Confirm` → `input_required`; `NoPrompter(true).Confirm` → true | unit | all |
+| TC-27 | `NativeAbs` table: relative path → absolute under the working dir; `a/../b` cleaned; on Windows the result uses `\`, elsewhere `/` | unit | all |
+| TC-28 | `lock.With` whose `fn` blocks until ctx is cancelled: after cancel, `With` returns `interrupted`, `githive.lock.info` is gone, and a second `Acquire` succeeds at once (BR-12) | integration | all |
 
 The test hooks (fake version, exposed env) are unexported package variables, set only in `_test.go` files.
 
@@ -386,7 +391,9 @@ The test hooks (fake version, exposed env) are unexported package variables, set
 - [ ] git is run with an argument list, `LC_ALL=C`, and no credential prompts when non-interactive; version ≥ 2.38 is enforced (TC-12 … TC-16).
 - [ ] git errors never show credentials (TC-17), and `--verbose` traces every call (TC-18).
 - [ ] The repository lock serialises GitHive processes on one repo, never blocks other repos, times out with code 5, and reports who holds it (TC-19 … TC-24).
-- [ ] Ctrl+C exits 130 (TC-11).
+- [ ] Ctrl+C exits 130 and releases the lock (TC-11, TC-28).
+- [ ] Paths shown or put in JSON are absolute and OS-native (TC-27).
+- [ ] `internal/platform` has no import of `internal/ui` or `internal/apperr` (checked in review).
 - [ ] CI is green on ubuntu, windows and macos; `go test -race` passes on Linux and macOS.
 
 ## 11. Open questions
@@ -394,3 +401,12 @@ The test hooks (fake version, exposed env) are unexported package variables, set
 - [x] Timeout for `fetch` → none; git's own network settings apply. Revisit if agents report hangs.
 - [x] Package name for errors → `internal/apperr` (ADR-0004).
 - No open question blocks implementation.
+
+Coverage note: BR-13 (English only, CL-05) is a review convention and has no test case.
+
+## Revision history
+
+| Date | Change |
+| --- | --- |
+| 2026-11-13 | Approved (P04) |
+| 2026-11-13 | Rev 2 (P04b): `internal/platform` moved into DD-00a and no longer imports `ui` (`RepoWarnings` removed, `NativeAbs` added); TC-27, TC-28 added; DD-03 split into 03a/03b |

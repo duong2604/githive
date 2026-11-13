@@ -106,6 +106,7 @@ Exit codes are those of ADR-0002. Each error also carries a stable `error.code` 
 | 3 | `sync_conflict` | Sync stopped on a conflict; the worktree is back to its previous state |
 | 4 | `unsafe` | A safety check refused the action (dirty, unpushed, locked, main worktree) |
 | 5 | `lock_timeout` | Another GitHive command held the repository lock for too long |
+| 130 | `interrupted` | Ctrl+C or SIGTERM; the lock is released and the command's rollback runs (BR-12, ADR-0004) |
 
 ## 4. Main flow
 
@@ -192,3 +193,4 @@ flowchart TD
 | --- | --- |
 | 2026-11-13 | In review (P03) |
 | 2026-11-13 | Approved (P04): CL-05 answered, lock holder moved to `githive.lock.info`, fetch timeout closed |
+| 2026-11-13 | Rev 2 (P04b): `interrupted` (130) added to the §3.4 catalogue |

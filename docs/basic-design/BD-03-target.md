@@ -109,7 +109,7 @@ flowchart TD
 | More than one `@` | `invalid_target` | 2 |
 | Task name breaks §3.3 | `invalid_target`, with a corrected suggestion when one is obvious (lowercase, `_` kept, spaces → `-`) | 2 |
 | `project@*` given to a command that does not accept it | `invalid_target`, listing the accepted forms | 2 |
-| `task` alone or no target, but the current directory is not in any registered project | `input_required` in non-interactive mode; in interactive mode, ask which project | 2 |
+| `task` alone or no target, but the current directory is not in any registered project | `input_required` in non-interactive mode; in interactive mode, ask which project (pick from the registered projects) | 2 |
 | No target for a single-task command, current directory is the main repo, not a task worktree | `input_required` (non-interactive) or ask which task (interactive) | 2 |
 | Project not registered | `project_not_found`, with up to three closest names | 2 |
 | Task does not exist (any command except `spawn`) | `task_not_found`, with up to three closest names in that project | 2 |
@@ -141,7 +141,6 @@ flowchart TD
 
 - Targeting worktrees outside `worktrees_root` (BR-09): later version if needed.
 - Patterns other than `*` (for example `kirindo@fix-*`): not planned for the MVP.
-- Picking a task from a list when the target is missing: part of the interactive menu (BD-01).
 
 ## 9. Open questions
 
@@ -163,3 +162,4 @@ flowchart TD
 | --- | --- |
 | 2026-11-13 | In review (P03) |
 | 2026-11-13 | Approved (P04): CL-06 answered; §3.4 example suggestion corrected to `task_18` (BR-04 keeps `_`) |
+| 2026-11-13 | Rev 2 (P04b): interactive picking of a project or task belongs to target resolution (DD-03), not to the BD-01 menu; removed the contradicting line from §8 |
