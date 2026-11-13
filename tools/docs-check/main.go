@@ -9,8 +9,12 @@
 //	c) BD/DD file names match nameRe, except BD-00-overview.md;
 //	d) .md files in docs/ and at the repository root are UTF-8 without CRLF (P01b-D3);
 //	e) every front matter last_updated is a valid YYYY-MM-DD date (P01b-D5);
-//	f) docs/prompts/ files except README.md match promptNameRe and have prompt front matter (P01b-D7);
-//	g) docs/reports/ files match reportNameRe with a valid date; no front matter required (P04b-D10).
+//	f) docs/prompts/ files except README.md match promptNameRe (Pxx or PO-xx, PO-01) and have prompt front matter (P01b-D7);
+//	g) docs/reports/ files match reportNameRe with a valid date; no front matter required (P04b-D10);
+//	   PO-xx session reports and FEAT-DD-NN feature reports are accepted too (PO-01);
+//	h) docs/handoff/ files match handoffNameRe (PO-01, CLAUDE.md §15).
+//
+// docs/product/ (PO-01) has no rule of its own: only rules a and d apply.
 //
 // Size (P02-D3): there is no fixed line limit. When this file grows past about
 // 250 lines, split it into several files in this package (e.g. rules.go,
@@ -37,15 +41,16 @@ type schema struct {
 }
 
 var (
-	nameRe       = regexp.MustCompile(`^(BD|DD)-\d{2}-[a-z0-9-]+\.md$`)
-	promptNameRe = regexp.MustCompile(`^P\d{2}[a-z]?-[a-z0-9-]+\.md$`)
-	reportNameRe = regexp.MustCompile(`^P\d{2}[a-z]?-(\d{4}-\d{2}-\d{2})(-\d+)?\.md$`)
-	dateRe       = regexp.MustCompile(`^\d{4}-\d{2}-\d{2}$`)
-	nonEmpty     = map[string]bool{"id": true, "title": true, "status": true}
-	docFields    = []string{"id", "title", "status", "req", "depends_on", "owner", "last_updated"}
-	designDoc    = schema{docFields, []string{"Draft", "In review", "Approved", "Superseded"}}
-	adrDoc       = schema{docFields, []string{"Draft", "In review", "Approved", "Superseded", "Rejected"}}
-	promptDoc    = schema{[]string{"id", "title", "step", "status", "branch", "pr", "depends_on", "decisions", "last_updated"},
+	nameRe        = regexp.MustCompile(`^(BD|DD)-\d{2}-[a-z0-9-]+\.md$`)
+	promptNameRe  = regexp.MustCompile(`^(P\d{2}|PO-\d{2})[a-z]?-[a-z0-9-]+\.md$`)
+	reportNameRe  = regexp.MustCompile(`^(?:(?:P\d{2}|PO-\d{2})[a-z]?|FEAT-DD-\d{2})-(\d{4}-\d{2}-\d{2})(-\d+)?\.md$`)
+	handoffNameRe = regexp.MustCompile(`^(TL|DEV-\d+)\.md$`)
+	dateRe        = regexp.MustCompile(`^\d{4}-\d{2}-\d{2}$`)
+	nonEmpty      = map[string]bool{"id": true, "title": true, "status": true}
+	docFields     = []string{"id", "title", "status", "req", "depends_on", "owner", "last_updated"}
+	designDoc     = schema{docFields, []string{"Draft", "In review", "Approved", "Superseded"}}
+	adrDoc        = schema{docFields, []string{"Draft", "In review", "Approved", "Superseded", "Rejected"}}
+	promptDoc     = schema{[]string{"id", "title", "step", "status", "branch", "pr", "depends_on", "decisions", "last_updated"},
 		[]string{"Ready", "Running", "Done", "Superseded"}}
 )
 
@@ -129,6 +134,9 @@ func check(root string) ([]string, error) {
 			} else if _, err := time.Parse("2006-01-02", m[1]); err != nil {
 				add(rel, "report date %q is not a valid YYYY-MM-DD date", m[1])
 			}
+		}
+		if path.Dir(rel) == "docs/handoff" && !handoffNameRe.MatchString(name) { // rule h
+			add(rel, "handoff file name must match %s", handoffNameRe)
 		}
 		var msgs []string
 		switch {
