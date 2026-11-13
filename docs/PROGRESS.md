@@ -5,14 +5,14 @@ status: Approved
 req: []
 depends_on: []
 owner: Danny (duong2604)
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # Progress
 
 ## Current phase
 
-Phase 1 — the documentation baseline and the code skeleton are done (steps 1, 1b, 1c, 1d, 2a). BD-00, BD-03, DD-00, DD-03 and ADR-0004 are Approved (rev 2 since P04b) and wait for PR #6 to be merged (steps 2d, 2d-b). Next step: P05 (create issues from DD-00 and DD-03).
+Phase 1 — the documentation baseline and the code skeleton are done (steps 1, 1b, 1c, 1d, 2a). BD-00, BD-03, DD-00, DD-03 and ADR-0004 are Approved and merged (PR #6). PO-01 introduces the PO / TL / Dev operating model and DD-00, DD-03 rev 3 (PR #7, in review). Next step: P05 (create issues from DD-00 and DD-03), run or delegated by the TL.
 
 ## Scope
 
@@ -35,9 +35,10 @@ From `BD-00-overview.md` section 10 (P01c-D4):
 | 2a Bootstrap project (P02, runs P00 part B steps 0–2) | Agent | Done | [PR #4](https://github.com/duong2604/githive/pull/4) (merged) | 2026-11-13 |
 | 2b Add BD-00-foundation and BD-03 for review (P03) | Agent | Done | [PR #6](https://github.com/duong2604/githive/pull/6) | 2026-11-13 |
 | 2c Review BD-00 and BD-03; write DD-00, DD-03 and ADR-0004 | Advisor + Danny | Done | P04 decisions, CL-05, CL-06 | 2026-11-13 |
-| 2d Approve BD-00, BD-03; add DD-00, DD-03, ADR-0004 (P04) | Agent | In review | [PR #6](https://github.com/duong2604/githive/pull/6) | 2026-11-13 |
-| 2d-b Apply P04 review: BD/DD rev 2, saved reports (P04b) | Agent | In review | [PR #6](https://github.com/duong2604/githive/pull/6) | 2026-11-13 |
-| 3 Issues + implementation for DD-00, DD-03 | Agent | Not started | | |
+| 2d Approve BD-00, BD-03; add DD-00, DD-03, ADR-0004 (P04) | Agent | Done | [PR #6](https://github.com/duong2604/githive/pull/6) (merged) | 2026-11-13 |
+| 2d-b Apply P04 review: BD/DD rev 2, saved reports (P04b) | Agent | Done | [PR #6](https://github.com/duong2604/githive/pull/6) (merged) | 2026-11-13 |
+| PO-01 PO/TL/Dev operating model, handoff rules, DD-00 and DD-03 rev 3 | TL | In review | [PR #7](https://github.com/duong2604/githive/pull/7) | 2026-11-14 |
+| 3 Issues + implementation for DD-00, DD-03 | TL + Dev | Not started | | |
 
 Prompts for each step: [`docs/prompts/README.md`](prompts/README.md) (one prompt per session).
 
@@ -74,3 +75,5 @@ Prompts for each step: [`docs/prompts/README.md`](prompts/README.md) (one prompt
 | 2026-11-13 | P04: BD-00 and BD-03 Approved; DD-00, DD-03 and ADR-0004 added verbatim; CL-05, CL-06; CLAUDE.md §4–§5 and BD index updated (P04-D5…D7); P05 prompt renumbered and sliced (P04-D8) | [#6](https://github.com/duong2604/githive/pull/6) | WSL Ubuntu 24.04 (Go 1.26.5) |
 | 2026-11-13 | The original P04 report (WSL work laptop) was lost when switching machines; it was reconstructed from the branch on the Windows laptop and saved as [docs/reports/P04-2026-11-13.md](reports/P04-2026-11-13.md) | — | Windows 11 |
 | 2026-11-13 | P04b: BD-00, BD-03, DD-00, DD-03 rev 2 committed verbatim (P04b-D1…D6); README `sync <targets...>` (D7); CLAUDE.md §5 lock scope adds `git config --local` (D8); PR #6 body updated (D9); session reports saved in `docs/reports/`, CLAUDE.md §13 and docs-check rule (g) (D10); P05 plans five issues and prompts P06…P10 (D11) | [#6](https://github.com/duong2604/githive/pull/6) | Windows 11 (Git Bash, Go 1.26.5) |
+| 2026-11-13 | PR #6 merged into main (ab39994). Steps 2d and 2d-b marked Done | — | — |
+| 2026-11-14 | PO-01: discarded three uncommitted hand-copied files on `main` (DD-00, DD-03, P05; 62 insertions, 12 deletions) with `git restore`, per R1; their DD content re-applied section by section as DD-00, DD-03 rev 3 (PO-01-D1…D6). CLAUDE.md §1, §13–§15 (roles, working agreement, handoff); `docs/templates/HANDOFF-template.md`, `docs/handoff/TL.md`; docs-check accepts PO prompts/reports, FEAT-DD reports, `docs/product/`, rule (h) for `docs/handoff/` | [#7](https://github.com/duong2604/githive/pull/7) | Windows 11 (Git Bash, Go 1.26.5) |
