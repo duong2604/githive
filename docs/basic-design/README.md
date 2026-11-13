@@ -14,10 +14,10 @@ The BD-00 row below is the feature document "Shared foundation", written as [`BD
 
 | BD ID | Feature | Commands | DD ID | BD status | DD status | Depends on | REQ |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| BD-00 | [Shared foundation](BD-00-foundation.md): git runner, locking, `--json` output and exit codes, OS-specific paths | (shared) | DD-00 | In review | Not started | — | NFR-01, NFR-02, NFR-05 |
+| BD-00 | [Shared foundation](BD-00-foundation.md): git runner, locking, `--json` output and exit codes, OS-specific paths | (shared) | [DD-00](../detail-design/DD-00-foundation.md) | Approved | Approved | — | NFR-01, NFR-02, NFR-05 |
 | BD-01 | Initialisation and global configuration | `init`, `config` | DD-01 | Not started | Not started | BD-00 | REQ-01, REQ-02, NFR-04, NFR-05 |
 | BD-02 | Projects and base branch | `project add/list/config` | DD-02 | Not started | Not started | BD-00, BD-03 | REQ-03, REQ-08, NFR-03 |
-| BD-03 | [`project@task` target grammar](BD-03-target.md) | (shared) | DD-03 | In review | Not started | — | REQ-03, REQ-04, REQ-05, REQ-07 |
+| BD-03 | [`project@task` target grammar](BD-03-target.md) | (shared) | [DD-03](../detail-design/DD-03-target.md) | Approved | Approved | BD-00 | REQ-03, REQ-04, REQ-05, REQ-07 |
 | BD-04 | Create a worktree | `spawn` | DD-04 | Not started | Not started | BD-00, BD-03 | REQ-04, NFR-02 |
 | BD-05 | Show status | `swarm`, `inspect` | DD-05 | Not started | Not started | BD-00, BD-03 | REQ-05 |
 | BD-06 | Sync with base | `sync` | DD-06 | Not started | Not started | BD-00, BD-03 | REQ-06 |
