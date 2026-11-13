@@ -12,7 +12,7 @@ last_updated: 2026-11-13
 
 ## Current phase
 
-Phase 1 — the documentation baseline and the code skeleton are done (steps 1, 1b, 1c, 1d, 2a). Step 2b in progress: BD-00-foundation and BD-03 are in review in PR #6; DD-00 and DD-03 follow in P04.
+Phase 1 — the documentation baseline and the code skeleton are done (steps 1, 1b, 1c, 1d, 2a). BD-00, BD-03, DD-00, DD-03 and ADR-0004 are Approved and wait for PR #6 to be merged (step 2d). Next step: P05 (create issues from DD-00 and DD-03).
 
 ## Scope
 
@@ -33,7 +33,9 @@ From `BD-00-overview.md` section 10 (P01c-D4):
 | 1c Refresh BD-00 overview (P01c) | Agent | Done | [PR #5](https://github.com/duong2604/githive/pull/5) (merged) | 2026-11-13 |
 | 1d Rebase on bootstrap, apply P01c review (P01d) | Agent | Done | [PR #5](https://github.com/duong2604/githive/pull/5) (merged) | 2026-11-13 |
 | 2a Bootstrap project (P02, runs P00 part B steps 0–2) | Agent | Done | [PR #4](https://github.com/duong2604/githive/pull/4) (merged) | 2026-11-13 |
-| 2b BD-00, BD-03 → DD-00, DD-03 approved | Advisor + Danny | In review | [PR #6](https://github.com/duong2604/githive/pull/6) (BD-00-foundation, BD-03; P03) | 2026-11-13 |
+| 2b Add BD-00-foundation and BD-03 for review (P03) | Agent | Done | [PR #6](https://github.com/duong2604/githive/pull/6) | 2026-11-13 |
+| 2c Review BD-00 and BD-03; write DD-00, DD-03 and ADR-0004 | Advisor + Danny | Done | P04 decisions, CL-05, CL-06 | 2026-11-13 |
+| 2d Approve BD-00, BD-03; add DD-00, DD-03, ADR-0004 (P04) | Agent | In review | [PR #6](https://github.com/duong2604/githive/pull/6) | 2026-11-13 |
 | 3 Issues + implementation for DD-00, DD-03 | Agent | Not started | | |
 
 Prompts for each step: [`docs/prompts/README.md`](prompts/README.md) (one prompt per session).
@@ -68,3 +70,4 @@ Prompts for each step: [`docs/prompts/README.md`](prompts/README.md) (one prompt
 | 2026-11-13 | P01d: PR #5 rebased on main after PR #4; ADR-0003 (`--all`, `project@*`); CLAUDE.md §4 (version, shell-init, retire --force, bare `githive` prints help) and §5 key naming; BD-00 overview vs foundation note; v1 zip note | [#5](https://github.com/duong2604/githive/pull/5) | Windows 11 (Git Bash, Go 1.26.5) |
 | 2026-11-13 | PR #5 merged into main (62dd4b1). Steps 1c and 1d marked Done | — | — |
 | 2026-11-13 | P03: BD-00-foundation and BD-03 (In review) and BD-00 overview revision 3 committed verbatim; CLAUDE.md §4 drops `-p/--project` and lists global flags (P03-D1); README command table synced (P03-D2); issue prompt renumbered to P05 (P03-D4); traceability set to In design | [#6](https://github.com/duong2604/githive/pull/6) | WSL Ubuntu 24.04 (Go 1.26.5) |
+| 2026-11-13 | P04: BD-00 and BD-03 Approved; DD-00, DD-03 and ADR-0004 added verbatim; CL-05, CL-06; CLAUDE.md §4–§5 and BD index updated (P04-D5…D7); P05 prompt renumbered and sliced (P04-D8) | [#6](https://github.com/duong2604/githive/pull/6) | WSL Ubuntu 24.04 (Go 1.26.5) |

@@ -23,6 +23,7 @@ Mỗi phiên Claude Code chạy đúng một prompt. Các prompt dưới đây d
 | P01d | [P01d-apply-p01c-review.md](P01d-apply-p01c-review.md) | 1d | Done | `docs/refresh-bd-00` / [#5](https://github.com/duong2604/githive/pull/5) (merged) | P01d-D1…D7 |
 | P02 | [P02-bootstrap-project.md](P02-bootstrap-project.md) | 2a | Done | `chore/bootstrap` / [#4](https://github.com/duong2604/githive/pull/4) (merged) | P02-D1…D4 |
 | P03 | [P03-add-bd-00-and-bd-03.md](P03-add-bd-00-and-bd-03.md) | 2b | Done | `docs/bd-00-03` / [#6](https://github.com/duong2604/githive/pull/6) (in review) | P03-D1…D4 |
+| P04 | [P04-approve-bd-add-dd-00-03.md](P04-approve-bd-add-dd-00-03.md) | 2d | Done | `docs/bd-00-03` / [#6](https://github.com/duong2604/githive/pull/6) (in review) | P04-D1…D8, CL-05, CL-06 |
 | P05 | [P05-create-issues-from-dd.md](P05-create-issues-from-dd.md) | 3 | Ready | `docs/issues-from-dd` | — |
 
 ## Quy ước
