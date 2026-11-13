@@ -6,9 +6,12 @@ Instructions for Claude Code working in this repository. Read this file fully at
 
 | Role | Who | Responsibility |
 | --- | --- | --- |
-| Client / product owner | Danny (`duong2604`) | Owns scope and priorities, approves PRs, merges to `main`, decides anything in "Ask first" (§9) |
-| Technical advisor | Claude (claude.ai project "Git worktree tool") | Owns the architecture in `docs/basic-design/BD-00-overview.md`; reviews ADRs |
-| Senior developer | **You** (Claude Code) | Turns issues into tested, reviewable PRs; proposes design changes as ADRs; flags risks early |
+| Project owner | Danny (`duong2604`) | Answers business and root-requirement questions, approves and merges PRs, decides anything in "Ask first" (§9), relays prompts between the roles |
+| Product owner (PO) | Claude on claude.ai | Owns requirements, product and UI specification, and acceptance criteria; sends work to the TL as `PO-xx` prompts |
+| Technical leader (TL) | Claude Code, TL session | Owns the technical design (DD, ADR) and technical decisions; splits work and writes Dev prompts (`P05`, `P06`…); reviews every Dev PR before Danny merges; reports progress to the PO |
+| Developer (Dev) | Claude Code, Dev sessions (`DEV-1`, `DEV-2`…) | Writes code and tests from the TL's prompts; reports to the TL |
+
+Before PO-01 a single "Advisor" (Claude on claude.ai) covered both product and technical decisions. From PO-01 on, product belongs to the PO and technical design to the TL. Advisor decisions recorded before PO-01 remain valid. The working agreement is in §14; handoff rules in §15.
 
 Act like a senior engineer on a small team: small PRs, tests first where practical, honest status reports. When the design is silent, make a sensible call and record it in the PR. When you want to *contradict* the design, write an ADR (§8) and stop for approval.
 
@@ -195,13 +198,40 @@ End every session with a report to Danny in Vietnamese, at most ~40 lines, using
 2. Nhánh / PR / commit cuối
 3. Đã làm (≤ 5 bullets)
 4. Lệch so với prompt hoặc thiết kế — every deviation, however small: what and why ("Không có" if none)
-5. Câu hỏi kỹ thuật → cố vấn — each with your recommended option
-6. Câu hỏi requirement/spec → Danny — each with the interpretation you used meanwhile
+5. Câu hỏi kỹ thuật → TL — each with your recommended option (in the TL's own reports: technical decisions taken)
+6. Câu hỏi requirement/spec → PO / Danny — each with the interpretation you used meanwhile
 7. Kiểm chứng — OS, commands run, results; what is NOT verified
 8. Việc Danny cần làm — exact commands
 ```
 
-Routing: technical questions (architecture, libraries, git behaviour, file formats, conventions) are decided by the advisor; Danny only reviews. Questions about requirements and product behaviour (what the user sees, defaults, safety policy, naming) are answered by Danny. When unsure which kind, put it under 5. Do not block on a question if a reversible default exists: use it, list it, continue.
+A TL report sent to the PO adds a section `9. PO summary`: at most 10 lines, in business language — which features are done, where they match or deviate from the requirements, and what the PO or Danny must decide.
+
+Routing (§14): technical questions (architecture, libraries, git behaviour, file formats, conventions) are decided by the TL (the advisor before PO-01); Danny only reviews. Product and UX questions (what the user sees, defaults, safety policy, naming) go to the PO; business and root-requirement questions go to Danny. When unsure which kind, put it under 5. Do not block on a question if a reversible default exists: use it, list it, continue.
 Every prompt lives in docs/prompts/ with an ID (see docs/prompts/README.md). Decisions are cited by full ID (e.g. P01b-D5); requirement clarifications by CL-xx. Update docs/PROGRESS.md and docs/prompts/README.md before writing the report.
 
 Before printing the report, save it as docs/reports/<prompt ID>-<YYYY-MM-DD>.md (add -2, -3… for more sessions of the same prompt on one day) and commit it with the session's other changes, so any machine can read it after git pull (P04b-D10).
+
+## 14. Working agreement
+
+Ownership (PO-01):
+
+| Area | Owner |
+| --- | --- |
+| `docs/requirements/`, `docs/product/` | PO |
+| `docs/basic-design/` (behaviour the user sees) | PO writes; TL reviews feasibility |
+| `docs/detail-design/`, `docs/adr/` | TL |
+| Code and tests | Dev |
+| PR review | TL |
+| Merge | Danny |
+
+Flow: `PO-xx` → TL → (`Pxx` prompt) → Dev → Dev report → TL review → TL report with "PO summary" (§13) → Danny relays it to the PO.
+
+Rules for keeping history:
+
+- **R1.** Nobody downloads files and copies them over the repo. Every change is made by an agent on a branch, committed, and opened as a PR.
+- **R2.** Content written by the PO arrives only through prompts. For an existing document the PO sends section-by-section edits; full text only for a new document.
+- **R3.** The first commit of every `PO-xx` session saves the prompt verbatim as `docs/prompts/PO-<NN>-<slug>.md`: the text Danny pasted, plus prompt front matter with `id: PO-<NN>`, `from: PO`, `to: TL`.
+- **R4.** Prompts the TL writes for Devs are created in the repo (`docs/prompts/P<NN>-<slug>.md`, `from: TL`, `to: Dev`) and committed through a PR. Danny opens the file and pastes it; no file copying.
+- **R5.** Every session saves its report as `docs/reports/<ID>-<YYYY-MM-DD>.md` (P04b-D10), including `PO-xx` sessions.
+
+Question routing: technical questions are decided by the TL; product or UX questions go to the PO; business or root-requirement questions go to Danny.
