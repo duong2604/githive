@@ -8,7 +8,7 @@
 | PR | [#7](https://github.com/duong2604/githive/pull/7) (draft) |
 | Last commit | see `git log -1` on the branch (this file is updated in the same group) |
 | State | working |
-| Last updated | 2026-11-14 00:01 +0700 |
+| Last updated | 2026-11-14 00:03 +0700 |
 
 ## Session goal
 
@@ -20,17 +20,17 @@ Record the PO/TL/Dev operating model (CLAUDE.md §1, §13–§15, handoff templa
 - Step 1: branch created, prompt saved, draft PR #7 opened.
 - Step 2a–2c: CLAUDE.md §1, §13 (PO summary), §14.
 - Step 2c-bis: CLAUDE.md §15, `docs/templates/HANDOFF-template.md`, this file.
+- Step 2e: docs-check accepts PO prompts/reports, FEAT-DD reports, `docs/product/`; rule (h) for `docs/handoff/`; table tests.
+- Step 3: DD-00 and DD-03 rev 3 (PO-01-D1…D6), same content as the discarded hand copy but cited as PO-01-Dn.
 
 ## In progress
 
-- Step 2d–2e: `docs/prompts/README.md`, `tools/docs-check/main.go` (`promptNameRe`, `reportNameRe`, handoff rule) and `main_test.go`.
+- Step 2d and step 5: `docs/prompts/README.md` (From → To column, PO naming, PO-01 row), `docs/PROGRESS.md`.
 
 ## Next steps
 
-1. docs-check rules and table tests; commit `chore(docs-check): …`.
-2. DD-00 §1, §3.5, §9 and DD-03 §7 rev 3; commit `docs: DD-00, DD-03 rev 3 (PO-01-D1..D6)`.
-3. PROGRESS.md and prompt index; commit `docs: record PO-01 …`.
-4. Report `docs/reports/PO-01-<date>.md` with the TL assessment; push; wait for CI; mark PR #7 ready.
+1. PROGRESS.md and prompt index; commit `docs: record PO-01 …`.
+2. Report `docs/reports/PO-01-<date>.md` with the TL assessment; push; wait for CI; mark PR #7 ready.
 
 ## Commands to resume
 

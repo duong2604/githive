@@ -5,7 +5,7 @@ status: Approved
 req: [REQ-03, REQ-04, REQ-05, REQ-07]
 depends_on: [BD-03, DD-00, ADR-0003]
 owner: Advisor
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # DD-03 — Target grammar
@@ -236,6 +236,7 @@ None. Resolution only reads: git `rev-parse`, the project list and directory lis
 | Empty target, leading `@`, more than one `@`, empty side | `invalid_target` | §5.1 | 2 |
 | Bad task or project name | `invalid_target` | §5.2, hint with suggestion | 2 |
 | `project@*` where not allowed | `invalid_target` | `<cmd> does not accept project@*` | 2 |
+| A single task given to `swarm` (`AllowTask` false) | `invalid_target` | `<cmd> takes 'project@*' or --all, not a single task` | 2 |
 | Several targets where one is allowed | `usage` | `this command takes one target` | 2 |
 | Target needed but none given (non-interactive) | `input_required` | §5.4 step 1 | 2 |
 | Bare task outside any project | `input_required` | §5.4 step 4 | 2 |
@@ -300,3 +301,4 @@ Coverage deferred to later DDs: BR-05 "two projects may not differ only in case"
 | --- | --- |
 | 2026-11-13 | Approved (P04) |
 | 2026-11-13 | Rev 2 (P04b): split into DD-03a/DD-03b; `Spec.AllowTask` so `swarm` rejects single tasks; interactive project picking per BD-03 §5; `repo_on_mnt` warning built here instead of in `platform`; TC-21, TC-22 added |
+| 2026-11-14 | Rev 3 (PO-01): §7 lists the `AllowTask` error (PO-01-D3); the `repo_on_mnt` message in §5.4 is the canonical text, the BD-00 example is illustrative (PO-01-D5) |

@@ -5,7 +5,7 @@ status: Approved
 req: [NFR-01, NFR-02, NFR-05]
 depends_on: [BD-00, ADR-0002, ADR-0004]
 owner: Advisor
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # DD-00 — Shared foundation
@@ -21,11 +21,11 @@ Deferred elsewhere:
 
 ### Implementation slices (one issue each)
 
-| Slice | Contents | Depends on | Size |
-| --- | --- | --- | --- |
-| DD-00a | `internal/apperr`, `internal/ui` (envelope, printer, mode, prompter), `internal/platform` (term, wsl, paths), changes to `internal/cli` and `cmd/githive` | — | ~450 lines incl. tests |
-| DD-00b | `internal/git` runner and version check | DD-00a | ~300 lines |
-| DD-00c | `internal/lock` | DD-00a | ~250 lines |
+| Slice | Contents | Depends on | Size | Test cases |
+| --- | --- | --- | --- | --- |
+| DD-00a | `internal/apperr`, `internal/ui` (envelope, printer, mode, prompter), `internal/platform` (term, wsl, paths), changes to `internal/cli` and `cmd/githive` | — | ~450 lines incl. tests (accepted above the ~400 guide, PO-01-D1) | TC-01 … TC-11, TC-25 … TC-27 |
+| DD-00b | `internal/git` runner and version check | DD-00a | ~300 lines | TC-12 … TC-18 |
+| DD-00c | `internal/lock` | DD-00a | ~250 lines | TC-19 … TC-24, TC-28 |
 
 After DD-00a is merged, DD-00b, DD-00c and DD-03a can run in parallel; they touch different packages. DD-03b needs DD-00b (see DD-03 §1).
 
@@ -236,7 +236,8 @@ func (l *Lock) Release() error
 // Any other value → apperr Usage.
 func Timeout(getenv func(string) string) (time.Duration, error)
 
-// With acquires, runs fn, and always releases.
+// With acquires, runs fn, and always releases. Errors are returned through apperr.From,
+// so a cancelled ctx (in Acquire or from fn) becomes interrupted (BR-12).
 func With(ctx context.Context, commonDir string, opt Options, fn func() error) error
 ```
 
@@ -376,7 +377,7 @@ The CLI prints the wait message on stderr, in text mode only: `waiting for <comm
 | TC-23 | Cross-process: test re-executes its own binary (helper-process pattern) to hold the lock; the parent gets `lock_timeout`; after the child exits the parent acquires | integration | all |
 | TC-24 | Different common dirs lock independently (both acquire at once) | integration | all |
 | TC-25 | `UnderMnt` with `IsWSL` forced true: `/mnt/c/x` → true, `/mnt/data/x` → false, `/home/x` → false | unit | all |
-| TC-26 | `NoPrompter(false).Confirm` → `input_required`; `NoPrompter(true).Confirm` → true | unit | all |
+| TC-26 | `NoPrompter(false)`: `Input`, `Select` and `Confirm` → `input_required`; `NoPrompter(true)`: `Confirm` → true, `Input` and `Select` still → `input_required` (BR-02) | unit | all |
 | TC-27 | `NativeAbs` table: relative path → absolute under the working dir; `a/../b` cleaned; on Windows the result uses `\`, elsewhere `/` | unit | all |
 | TC-28 | `lock.With` whose `fn` blocks until ctx is cancelled: after cancel, `With` returns `interrupted`, `githive.lock.info` is gone, and a second `Acquire` succeeds at once (BR-12) | integration | all |
 
@@ -410,3 +411,4 @@ Coverage note: BR-13 (English only, CL-05) is a review convention and has no tes
 | --- | --- |
 | 2026-11-13 | Approved (P04) |
 | 2026-11-13 | Rev 2 (P04b): `internal/platform` moved into DD-00a and no longer imports `ui` (`RepoWarnings` removed, `NativeAbs` added); TC-27, TC-28 added; DD-03 split into 03a/03b |
+| 2026-11-14 | Rev 3 (PO-01): "Test cases" column in the slices table, issues take their acceptance criteria from it (PO-01-D1, D2); `lock.With` returns errors through `apperr.From` (PO-01-D4); TC-26 also covers `Input` and `Select` (PO-01-D5) |
