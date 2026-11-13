@@ -1,11 +1,11 @@
 ---
 id: UI-SPEC
 title: GitHive — CLI user interface specification
-status: In review
+status: Approved
 req: [REQ-01, REQ-02, REQ-03, REQ-04, REQ-05, REQ-06, REQ-07, REQ-08, NFR-01, NFR-04, NFR-05]
 depends_on: [BD-00-overview, BD-00, BD-03]
 owner: PO
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # GitHive — CLI user interface specification
@@ -27,6 +27,7 @@ GitHive has no window and no web page. Its interface is the terminal: bash or zs
 - **P3 — Show the next step.** Every result ends with what the user can do next: a `cd` command, the command to fix an error.
 - **P4 — Fit any terminal.** Output fits 80 columns and works without colour or Unicode.
 - **P5 — Same words everywhere.** One name per thing: project, task, base branch, worktree. Messages in English (CL-05).
+- **P6 — This document is the reference for what users see.** Output examples in BD and DD documents are illustrative.
 
 ## 3. Interface surfaces
 
@@ -37,8 +38,8 @@ GitHive has no window and no web page. Its interface is the terminal: bash or zs
 | UI-03 | "Not set up yet" gate | Any command before setup | MVP |
 | UI-04 | Main menu (`githive` with no arguments) | Daily use without remembering commands | MVP |
 | UI-05 | Pickers: project, task, confirm | Inside the menu, or when a command lacks an argument in a terminal | MVP |
-| UI-06 | Command results: spawn, swarm, inspect, retire, project list, path, doctor | Every command | MVP |
-| UI-07 | sync screens | Updating a task from its base branch | v1 |
+| UI-06 | Command results: `spawn`, `swarm`, `inspect`, `retire`, `project list`, `path`, `doctor` | Every command | MVP |
+| UI-07 | `sync` screens | Updating a task from its base branch | v1 |
 | UI-08 | Messages: errors, warnings, waiting | When something goes wrong or waits | MVP |
 | UI-09 | Help text | `--help` on any command | MVP |
 | UI-10 | Agent mode (`--json`) | Agents and scripts | MVP |
@@ -103,6 +104,7 @@ Rules:
 - If the chosen projects folder has no git project, the wizard says so and asks again; it does not fail.
 - Re-running `init` shows the current values as defaults and changes only what the user edits.
 - Base branch detection only suggests a value; the user confirms each one.
+- The MVP wizard does not ask for a sync strategy; the default is kept until sync arrives in v1 (UI-D8).
 
 ## 6. UI-03 "Not set up yet" gate
 
@@ -115,6 +117,8 @@ GitHive is not set up on this machine yet.
 ```
 
 Without a terminal, or with `--json`/`--yes`: error `not_configured`, exit 2, hint `githive init`.
+
+Commands that work before setup, without the gate: `init`, `doctor`, `version`, `help`, `completion` (UI-D9).
 
 ## 7. UI-04 Main menu
 
@@ -144,6 +148,7 @@ Rules:
 - After an action completes, the menu shows the same screen the command would show (UI-06), then returns to the menu. "Quit" or Esc on the main menu exits.
 - Every menu action also prints the equivalent command in dim text, e.g. `→ githive spawn kirindo@task-18`, so users learn the commands.
 - "Sync a task" appears in v1.
+- In a command outside the menu, Esc or `q` in a picker cancels: GitHive prints `cancelled` and exits 130 (interrupted) (UI-D6).
 
 ## 8. UI-05 Pickers
 
@@ -153,8 +158,10 @@ Project picker shows the base branch so a project without one is obvious:
 ? Project
   > kirindo     base: dev       2 tasks
     crm2        base: develop   3 tasks
-    legacy      base: NOT SET
+    legacy      base: NULL
 ```
+
+`NULL` is the only word for a missing base branch, everywhere (UI-D2).
 
 Choosing a project with no base branch asks for it first (same question as the wizard, step 4).
 
@@ -205,6 +212,7 @@ kirindo   base origin/dev   2 tasks
 ```
 
 - STATE values: `clean`, `dirty` (uncommitted changes), `unpushed` (commits not on the remote), `merged` (remote branch gone or merged), `locked`, `external` (outside the worktrees folder, BD-03 BR-09).
+- When several states apply, the first in this order is shown: `locked`, `dirty`, `unpushed`, `merged`, `clean`; `external` replaces all others. `inspect` lists every state that applies (UI-D3).
 - BEHIND above 20 is shown in yellow with a footnote: `task-18 is 25 commits behind dev — consider githive sync` (v1 wording points to sync; MVP to `git rebase`).
 - `--all` prints one block per project, separated by a blank line.
 - Columns that do not fit narrow terminals are dropped from the right: LAST COMMIT first, then BRANCH.
@@ -224,7 +232,7 @@ kirindo@task-18
 ### retire (remove)
 
 ```
-$ githive retire 'kirindo@*' --merged
+$ githive retire 'kirindo@*'
   TASK       STATE     SIZE     ACTION
   fix-otp    merged    1.2 GB   remove
   task-18    dirty     —        keep (2 uncommitted changes)
@@ -236,6 +244,8 @@ $ githive retire 'kirindo@*' --merged
 ```
 
 The default answer is No. Tasks kept for safety are always listed with the reason (CL-03).
+
+Filters `--merged` and `--stale` arrive in v1 (UI-D1). Exit code: 0 when every selected task was removed; 4 (unsafe) when at least one selected task was kept by a safety check; tasks left out by a filter do not count. JSON lists `removed` and `kept`, each kept task with its reason (UI-D4).
 
 ### project list
 
@@ -302,6 +312,8 @@ When a conflict is predicted, the screen lists the files and offers "Cancel" (de
 
 - Colour is off with `--no-color`, `NO_COLOR`, `--json`, or when output is not a terminal (BD-00).
 - Unicode symbols fall back to the ASCII words above when the terminal cannot show them (Windows cmd with a legacy code page).
+- Output that is not a terminal (pipe, file) uses the ASCII words (UI-D5).
+- Known limitation: a standalone Git Bash window (mintty) may not be detected as a terminal; GitHive then runs in plain mode and prints a one-line tip: use Windows Terminal, the VS Code terminal, or `winpty githive` (UI-D10).
 - Meaning never depends on colour alone: every coloured element also has a symbol or word.
 - Tables fit 80 columns. Long paths are shortened in the middle (`D:\workspace\…\task-18`) in tables, never in `path` or JSON.
 - Times are relative in tables (`5m ago`) and absolute in `inspect` and JSON.
@@ -336,7 +348,7 @@ Agents and scripts use `--json` (and `--yes` where needed). Then: no colour, no 
 
 ## 15. UI-11 Shell completion (v1)
 
-`githive completion bash|zsh|fish|powershell` prints a completion script. Tab completes commands, flags, project names and `project@task` targets.
+`githive completion bash|zsh|fish|powershell` prints a completion script. Tab completes commands, flags, project names and `project@task` targets. The `completion` command itself is available from the MVP (UI-D7).
 
 ## 16. Out of scope
 
@@ -367,3 +379,25 @@ Answered 2026-11-13; recorded as clarifications CL-07 … CL-10 in `docs/require
 | NFR-01 (Windows, WSL, Linux, macOS) | §12 fallbacks, UI-06 doctor |
 | NFR-04 (settings survive restarts) | UI-02 "Saved to …" |
 | NFR-05 (choose instead of typing) | UI-02, UI-04, UI-05 |
+
+## 19. PO decisions (PO-02b)
+
+Answered 2026-11-14 in `docs/prompts/PO-02b-ui-spec-decisions.md`.
+
+- **UI-D1.** The MVP has no `--merged`/`--stale`; the `retire` example uses MVP syntax and both filters arrive in v1.
+- **UI-D2.** One word, `NULL`, is used everywhere for a missing base branch (pickers, `project list`, JSON), as in REQ-08.
+- **UI-D3.** STATE shows the first that applies in the order `locked`, `dirty`, `unpushed`, `merged`, `clean`; `external` replaces all others; `inspect` shows every state that applies.
+- **UI-D4.** `retire` exits 0 when every selected task was removed and 4 (unsafe) when at least one selected task was kept by a safety check; tasks left out by a filter (v1) do not count; JSON lists `removed` and `kept`, each kept task with its reason.
+- **UI-D5.** Output that is not a terminal (pipe, file) uses the ASCII words (`ok`, `warning:`, `error:`).
+- **UI-D6.** Esc or `q` in a picker during a command (not in the menu) cancels: GitHive prints `cancelled` and exits 130 (interrupted).
+- **UI-D7.** The cobra `completion` command is kept from the MVP; Tab completion of project and task names is v1.
+- **UI-D8.** The MVP wizard has 4 steps and does not ask for a sync strategy (the default is kept until v1).
+- **UI-D9.** Commands that run before setup, without the gate: `init`, `doctor`, `version`, `help`, `completion`.
+- **UI-D10.** If a standalone Git Bash window (mintty) is not detected as a terminal, GitHive runs in plain mode and prints a one-line tip (Windows Terminal, the VS Code terminal, or `winpty githive`); a known limitation, to be confirmed after DD-00a.
+
+## Revision history
+
+| Date | Change |
+| --- | --- |
+| 2026-11-13 | In review (PO-02) |
+| 2026-11-14 | Approved (PO-02b): UI-D1…UI-D10 |
