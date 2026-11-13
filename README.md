@@ -21,7 +21,7 @@ GitHive gives each parallel AI coding agent (or each human task) its own git wor
 | `githive spawn <target>` | `new`, `create` | Fetch base, create worktree + branch `<prefix><task>`, copy files, run hooks, print the path |
 | `githive swarm ['project@*' \| --all]` | `ls`, `list` | List worktrees: branch, ahead/behind base, dirty, last commit; `--all` lists every registered project (ADR-0003) |
 | `githive inspect <target>` | | Detailed status of one worktree |
-| `githive sync <target> [--rebase\|--merge] [--dry-run]` | | Fetch base, predict conflicts (`git merge-tree`), then rebase or merge |
+| `githive sync <targets...> [--rebase\|--merge] [--dry-run]` | | Fetch base, predict conflicts (`git merge-tree`), then rebase or merge |
 | `githive retire <targets...> [--merged] [--stale 14d] [-i] [--force]` | `rm`, `remove` | Safe removal of worktree + local branch; `--force` skips the CL-03 safety checks |
 | `githive path <target>` | | Print the path (for `cd`) |
 | `githive shell-init` | | Print a shell function for quick `cd` into a worktree (v1) |
