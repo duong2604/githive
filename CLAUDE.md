@@ -235,3 +235,22 @@ Rules for keeping history:
 - **R5.** Every session saves its report as `docs/reports/<ID>-<YYYY-MM-DD>.md` (P04b-D10), including `PO-xx` sessions.
 
 Question routing: technical questions are decided by the TL; product or UX questions go to the PO; business or root-requirement questions go to Danny.
+
+## 15. Handoff and takeover
+
+**R6. Reports by milestone.**
+- End of every prompt or session: a report as in R5.
+- End of every issue: the Dev saves the issue report in that issue's own PR (`docs/reports/P<NN>-<YYYY-MM-DD>.md`).
+- When every slice of a DD is merged (the feature is done): the TL writes a feature report `docs/reports/FEAT-DD-<NN>-<YYYY-MM-DD>.md` covering what the feature does against the REQ/BD, each acceptance criterion checked, deviations, and remaining work.
+
+**R7. A handoff file is always ready,** so another agent can take over at once if the current one goes offline.
+- Every agent keeps a handoff file on the branch it works on: `docs/handoff/TL.md`, `docs/handoff/DEV-1.md`, `DEV-2.md`… Each Dev running in parallel has its own ID; Danny writes it on the first line of the prompt.
+- The file follows `docs/templates/HANDOFF-template.md`: role and agent ID, prompt or issue, branch, PR, last commit; session goal; done; in progress (exact file and function); numbered next steps; commands to resume (`git switch …`, `go test …`); open questions and to whom; decisions made in the session; last update time.
+- Update and push the handoff file after every group of commits, before every long command or CI wait, and before ending the session. Never leave more than one group of commits without updating it.
+- Right after the first commit of a session, open the PR as a draft, so `gh pr list` always shows who is working on what, on which branch.
+- When the PR is merged, the handoff file goes into `main` with it and stays as that agent's last trace.
+
+**R8. Taking over from another agent.**
+- The new agent runs `gh pr list --state open`, `git switch <branch>`, `git pull`, then reads `docs/handoff/<ID>.md`, `CLAUDE.md` and the latest report in `docs/reports/`.
+- It adds a line `Taken over by <new ID> at <time>` to the handoff file and continues from "Next steps".
+- It does not redo work that is already committed.
