@@ -4,9 +4,9 @@ title: CLI user interface specification (UI spec)
 from: PO
 to: TL
 step: "3"
-status: Running
+status: Done
 branch: docs/po-02-ui-spec
-pr: ""
+pr: "#8"
 depends_on: [PO-01]
 decisions: [PO-02-N1, PO-02-N2, PO-02-N3, PO-02-N4, CL-07, CL-08, CL-09, CL-10]
 last_updated: 2026-11-14
