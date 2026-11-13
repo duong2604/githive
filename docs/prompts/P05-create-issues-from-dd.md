@@ -1,11 +1,11 @@
 ---
-id: P03
+id: P05
 title: Create GitHub issues from approved DDs
 step: "3"
 status: Ready
 branch: docs/issues-from-dd
 pr: ""
-depends_on: [P02]
+depends_on: [P04]
 decisions: []
 last_updated: 2026-11-13
 ---
@@ -27,4 +27,4 @@ Kết thúc bằng báo cáo theo mẫu CLAUDE.md §13, tiêu đề "Báo cáo �
 
 ## Sau P03
 
-Mỗi issue được giao bằng một prompt riêng, đặt tên theo số kế tiếp, ví dụ `P04-implement-dd-00-foundation.md` và `P05-implement-dd-03-target.md`. Cố vấn soạn các prompt này dựa trên mẫu C trong `P00-kickoff.md`, mở đầu bằng dòng "Implements DD-xx" và kết thúc bằng yêu cầu báo cáo theo §13.
+Mỗi issue được giao bằng một prompt riêng, đặt tên theo số kế tiếp, ví dụ `P06-implement-dd-00-foundation.md` và `P07-implement-dd-03-target.md`. Cố vấn soạn các prompt này dựa trên mẫu C trong `P00-kickoff.md`, mở đầu bằng dòng "Implements DD-xx" và kết thúc bằng yêu cầu báo cáo theo §13.
