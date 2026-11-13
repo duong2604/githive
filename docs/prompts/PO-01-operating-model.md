@@ -4,9 +4,9 @@ title: PO / TL / Dev operating model and DD rev 3
 from: PO
 to: TL
 step: "3"
-status: Running
+status: Done
 branch: chore/po-01-operating-model
-pr: ""
+pr: "#7"
 depends_on: [P04b]
 decisions: [PO-01-D1, PO-01-D2, PO-01-D3, PO-01-D4, PO-01-D5, PO-01-D6]
 last_updated: 2026-11-13
