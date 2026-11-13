@@ -5,7 +5,7 @@ status: Approved
 req: []
 depends_on: []
 owner: Danny (duong2604)
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # Requirements — CLI Tool For Worktree
@@ -46,6 +46,10 @@ Answers from Danny to questions raised while assigning IDs. They refine the orig
 | CL-04 | 4.8 (REQ-08) | "workspace\\" means the folder that holds the projects (projects root). "nhánh chỉ định chính để tạo workspace" means the base branch used to create worktrees. | P01b | 2026-11-13 |
 | CL-05 | NFR-05 | CLI output, help text and error messages are in English only. | P04 | 2026-11-13 |
 | CL-06 | REQ-04 | Task names are lowercase only. A different branch name, including one with upper-case letters, is set with `--branch`. | P04 | 2026-11-13 |
+| CL-07 | NFR-05 | The interactive main menu (UI-04) and the pickers (UI-05) of `docs/product/ui-spec.md` are in the MVP. | PO-02 | 2026-11-13 |
+| CL-08 | REQ-07 | Only `retire` measures folder size; `swarm` does not show size. | PO-02 | 2026-11-13 |
+| CL-09 | REQ-04 | After `spawn`, GitHive only prints the `cd` command (and `claude`). Opening a terminal tab or starting an agent automatically is v2. | PO-02 | 2026-11-13 |
+| CL-10 | REQ-07 | The confirmation before removing worktrees defaults to No (y/N). | PO-02 | 2026-11-13 |
 
 The remaining ambiguities were decided by the advisor in [`BD-00-overview.md`](../basic-design/BD-00-overview.md): the base is taken from `origin/<base>`; the worktree path includes the project name; sync means fetch then rebase/merge instead of pull; the "cần tư vấn" part of REQ-06 is answered in BD-00 section 9.
 
