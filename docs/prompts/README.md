@@ -24,6 +24,7 @@ Mỗi phiên Claude Code chạy đúng một prompt. Các prompt dưới đây d
 | P02 | [P02-bootstrap-project.md](P02-bootstrap-project.md) | 2a | Done | `chore/bootstrap` / [#4](https://github.com/duong2604/githive/pull/4) (merged) | P02-D1…D4 |
 | P03 | [P03-add-bd-00-and-bd-03.md](P03-add-bd-00-and-bd-03.md) | 2b | Done | `docs/bd-00-03` / [#6](https://github.com/duong2604/githive/pull/6) (in review) | P03-D1…D4 |
 | P04 | [P04-approve-bd-add-dd-00-03.md](P04-approve-bd-add-dd-00-03.md) | 2d | Done | `docs/bd-00-03` / [#6](https://github.com/duong2604/githive/pull/6) (in review) | P04-D1…D8, CL-05, CL-06 |
+| P04b | [P04b-apply-p04-review.md](P04b-apply-p04-review.md) | 2d | Done | `docs/bd-00-03` / [#6](https://github.com/duong2604/githive/pull/6) (in review) | P04b-D1…D11 |
 | P05 | [P05-create-issues-from-dd.md](P05-create-issues-from-dd.md) | 3 | Ready | `docs/issues-from-dd` | — |
 
 ## Quy ước
@@ -37,6 +38,7 @@ Mỗi phiên Claude Code chạy đúng một prompt. Các prompt dưới đây d
 - **Prompt đã chạy thì không sửa nội dung.** Muốn thay đổi thì tạo prompt mới với chữ cái kế tiếp.
 - **`Done` nghĩa là phiên đã chạy xong (P02-D1).** PR đã merge hay chưa thì xem cột Nhánh / PR (`(in review)` hoặc `(merged)`); không thêm trạng thái mới.
 - **Sửa prompt đã chạy (P02-D2):** chỉ được sửa `status`, `branch` và `pr` trong front matter; nội dung giữ nguyên.
+- **Báo cáo (P04b-D10):** mỗi phiên lưu báo cáo §13 vào `docs/reports/<ID prompt>-<YYYY-MM-DD>.md` (thêm `-2`, `-3`… nếu cùng prompt chạy nhiều phiên trong một ngày), commit cùng PR trước khi in ra chat; docs-check quy tắc (g) kiểm tên file.
 - **Vai trò:** quyết định kỹ thuật do cố vấn đưa ra, câu hỏi requirement do Danny trả lời (xem `CLAUDE.md` §13).
 
 ## Vòng lặp
