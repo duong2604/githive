@@ -1,7 +1,7 @@
 ---
 id: BD-03
 title: Target grammar — naming projects and tasks
-status: In review
+status: Approved
 req: [REQ-03, REQ-04, REQ-05, REQ-07]
 depends_on: [BD-00, ADR-0002, ADR-0003]
 owner: Advisor
@@ -71,7 +71,7 @@ Errors, for example:
 ```
 $ githive spawn kirindo@Task_18
 githive: invalid task name "Task_18": use lowercase letters, digits, ".", "_" or "-"
-hint: githive spawn kirindo@task-18
+hint: githive spawn kirindo@task_18
 ```
 
 ```
@@ -121,7 +121,7 @@ flowchart TD
 - **BR-01 — One grammar.** A target is `project@task`, `task` or `project@*`. No other spelling exists; there is no `-p/--project` flag (P03-D1).
 - **BR-02 — Split once.** The text is split at the first `@`. A second `@` makes the target invalid.
 - **BR-03 — No leading `@`.** A target never starts with `@` (PowerShell splatting, ADR-0002).
-- **BR-04 — Task names** follow §3.3 and are lowercase. GitHive never changes a name silently; it only suggests a corrected one.
+- **BR-04 — Task names** follow §3.3 and are lowercase (CL-06). GitHive never changes a name silently; it only suggests a corrected one.
 - **BR-05 — Project names** are matched case-insensitively and shown as registered. Two registered projects may not differ only in case.
 - **BR-06 — Current project.** A bare `task` and an omitted target use the project of the current directory, found through `git rev-parse --git-common-dir` (CL-01). GitHive never stores a "current project".
 - **BR-07 — Defaults when no target is given.** Single-task commands (`inspect`, `path`, `sync`) use the worktree the user is standing in. `swarm` uses the current project. `spawn` and `retire` always require an explicit target.
@@ -145,7 +145,7 @@ flowchart TD
 
 ## 9. Open questions
 
-- [ ] **Danny:** is lowercase-only for task names acceptable? Teams sometimes put ticket IDs in branch names (`ABC-123`). Default used until answered: lowercase only; `--branch` (CL-02) can still give the branch any name.
+- [x] **Danny:** is lowercase-only for task names acceptable? → Yes (CL-06, 2026-11-13); `--branch` (CL-02) can still give the branch any name, including upper case.
 - [ ] **Advisor (BD-02):** exact flag name for `project add --name`, and whether it can rename a discovered project.
 
 ## 10. Traceability
@@ -153,6 +153,13 @@ flowchart TD
 | Requirement | Business rules |
 | --- | --- |
 | REQ-03 (choose the project) | BR-01, BR-05, BR-06 (CL-01) |
-| REQ-04 (name a worktree and its branch) | BR-04, BR-08 (CL-02) |
+| REQ-04 (name a worktree and its branch) | BR-04, BR-08 (CL-02, CL-06) |
 | REQ-05 (list worktrees of a project) | BR-07, BR-09; `swarm --all` per ADR-0003 |
 | REQ-07 (remove several worktrees) | BR-07 (`retire` always explicit), BR-10 |
+
+## Revision history
+
+| Date | Change |
+| --- | --- |
+| 2026-11-13 | In review (P03) |
+| 2026-11-13 | Approved (P04): CL-06 answered; §3.4 example suggestion corrected to `task_18` (BR-04 keeps `_`) |

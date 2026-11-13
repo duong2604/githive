@@ -1,7 +1,7 @@
 ---
 id: BD-00
 title: Shared foundation — invocation, output, errors, git and locking
-status: In review
+status: Approved
 req: [NFR-01, NFR-02, NFR-05]
 depends_on: [BD-00-overview, ADR-0002, ADR-0003]
 owner: Advisor
@@ -152,10 +152,10 @@ flowchart TD
 - **BR-07 — No credential prompts when non-interactive.** In non-interactive mode git runs with `GIT_TERMINAL_PROMPT=0`, so a missing credential fails fast instead of hanging an agent.
 - **BR-08 — Minimum git.** git 2.38 or newer is required and checked before the first git call of a run.
 - **BR-09 — Repository lock.** Commands that write to the shared `.git` (fetch, worktree add/remove, branch delete, `git config --local`) take the lock in `git rev-parse --git-common-dir` (`githive.lock`), hold it only for those steps, and wait at most 30 s (overridable with `GITHIVE_LOCK_TIMEOUT`, in seconds). Different repositories never wait for each other. Read-only commands never take the lock.
-- **BR-10 — Lock holder is visible.** The lock file records the holder's command, pid, host and start time, so a waiting command can say who it waits for. The operating system releases the lock when the holder exits, so a crashed command never leaves a lock behind.
+- **BR-10 — Lock holder is visible.** A small file next to the lock (`githive.lock.info`, DD-00) records the holder's command, pid, host and start time, so a waiting command can say who it waits for. The operating system releases the lock when the holder exits, so a crashed command never leaves a lock behind.
 - **BR-11 — Paths.** Paths are printed in the native form of the OS (`D:\workspace\…` on Windows, `/home/…` elsewhere) and are absolute in JSON.
 - **BR-12 — Interrupt.** On Ctrl+C a command releases the lock, rolls back what its DD defines as rollback, and exits 130.
-- **BR-13 — Language.** All CLI output, help and error messages are in English (pending Danny's confirmation, §9).
+- **BR-13 — Language.** All CLI output, help and error messages are in English (CL-05).
 
 ## 7. Platform constraints
 
@@ -169,13 +169,13 @@ flowchart TD
 - The interactive menu shown when `githive` runs with no arguments: BD-01 (until then it prints help).
 - Log files and telemetry: not planned.
 - Localised messages: not planned (BR-13).
-- Timeouts for git network operations: open question §9.
+- Timeouts for git network operations: not planned (DD-00 §11).
 
 ## 9. Open questions
 
-- [ ] **Danny:** CLI messages in English only (BR-13)? Default used until answered: English.
-- [x] **Advisor:** exit code 130 on interrupt (BR-12) adds a code to the ADR-0002 list. It follows the shell convention (128 + SIGINT), so it is accepted; it is recorded as ADR-0004 when this BD is approved.
-- [ ] **Advisor (DD-00):** should `fetch` have its own timeout, or rely on git's own network settings? Default until DD-00: rely on git.
+- [x] **Danny:** CLI messages in English only (BR-13)? → Yes (CL-05, 2026-11-13).
+- [x] **Advisor:** exit code 130 on interrupt (BR-12) adds a code to the ADR-0002 list. It follows the shell convention (128 + SIGINT), so it is accepted; it is recorded in ADR-0004.
+- [x] **Advisor (DD-00):** should `fetch` have its own timeout? → No; rely on git's own network settings (DD-00 §11).
 
 ## 10. Traceability
 
@@ -185,3 +185,10 @@ flowchart TD
 | NFR-02 (parallel agents without conflicts) | BR-09, BR-10, BR-12 |
 | NFR-05 (interactive setup instead of typing commands) | BR-01, BR-02, BR-05 |
 | ADR-0002 (automation contract) | BR-03, BR-04, BR-07 |
+
+## Revision history
+
+| Date | Change |
+| --- | --- |
+| 2026-11-13 | In review (P03) |
+| 2026-11-13 | Approved (P04): CL-05 answered, lock holder moved to `githive.lock.info`, fetch timeout closed |
