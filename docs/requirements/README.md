@@ -75,17 +75,17 @@ The remaining ambiguities were decided by the advisor in [`BD-00-overview.md`](.
 | --- | --- | --- | --- | --- |
 | REQ-01 | BD-01 | DD-01 | — | Not started |
 | REQ-02 | BD-01 | DD-01 | — | Not started |
-| REQ-03 | BD-02 | DD-02 | — | Not started |
-| REQ-04 | BD-04, BD-03 | DD-04, DD-03 | — | Not started |
-| REQ-05 | BD-05 | DD-05 | — | Not started |
+| REQ-03 | BD-02, BD-03 | DD-02, DD-03 | — | In design |
+| REQ-04 | BD-04, BD-03 | DD-04, DD-03 | — | In design |
+| REQ-05 | BD-05, BD-03 | DD-05, DD-03 | — | In design |
 | REQ-06 | BD-06 | DD-06 | — | Not started |
-| REQ-07 | BD-07 | DD-07 | — | Not started |
+| REQ-07 | BD-07, BD-03 | DD-07, DD-03 | — | In design |
 | REQ-08 | BD-02 | DD-02 | — | Not started |
-| NFR-01 | BD-00, BD-09 | DD-00, DD-09 | — | Not started |
-| NFR-02 | BD-00, BD-04 | DD-00, DD-04 | — | Not started |
+| NFR-01 | BD-00, BD-09 | DD-00, DD-09 | — | In design |
+| NFR-02 | BD-00, BD-04 | DD-00, DD-04 | — | In design |
 | NFR-03 | BD-02 | DD-02 | — | Not started |
 | NFR-04 | BD-01 | DD-01 | — | Not started |
-| NFR-05 | BD-01, BD-00 | DD-01, DD-00 | — | Not started |
+| NFR-05 | BD-01, BD-00 | DD-01, DD-00 | — | In design |
 
 **Not derived from a requirement:** BD-08 (`path`, `shell-init`) has no source requirement. It comes from the design, so that an agent or user can move into a worktree (`cd "$(githive path <target>)"`).
 
