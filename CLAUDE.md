@@ -70,7 +70,9 @@ Binary: `githive`. Release packaging also installs `git-hive`, so `git hive <cmd
 | `githive config get/set` | | Global config |
 | `githive version` | | Print version, commit and build date; `--json` supported (since P02) |
 
-**Target grammar:** `project@task`. Inside a registered repo or one of its worktrees, `task` alone is enough. `'project@*'` (quote it in shells) selects every task of one project for `swarm`, `sync` and `retire`; `swarm --all` lists every registered project; `-p project --all` is not used (ADR-0003). Task names must match `^[a-z0-9][a-z0-9._-]{0,49}$` (no `@`, no `/`) and also pass `git check-ref-format --branch`. The grammar must never need a leading `@`, because PowerShell treats a leading `@` as splatting.
+**Target grammar:** `project@task`. Inside a registered repo or one of its worktrees, `task` alone is enough. `'project@*'` (quote it in shells) selects every task of one project for `swarm`, `sync` and `retire`; `swarm --all` lists every registered project; `-p project --all` is not used (ADR-0003). Task names must match `^[a-z0-9][a-z0-9._-]{0,49}$` (no `@`, no `/`) and also pass `git check-ref-format --branch`. The grammar must never need a leading `@`, because PowerShell treats a leading `@` as splatting. `-p/--project` does not exist; the project comes from the target or the current directory (BD-03, P03-D1).
+
+Global flags: --json, --yes/-y, --verbose/-v, --no-color, --help (BD-00 §3.1, In review).
 
 Running `githive` with no arguments prints help until DD-01 designs the interactive menu (P01d-D3).
 
