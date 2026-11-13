@@ -203,3 +203,5 @@ End every session with a report to Danny in Vietnamese, at most ~40 lines, using
 
 Routing: technical questions (architecture, libraries, git behaviour, file formats, conventions) are decided by the advisor; Danny only reviews. Questions about requirements and product behaviour (what the user sees, defaults, safety policy, naming) are answered by Danny. When unsure which kind, put it under 5. Do not block on a question if a reversible default exists: use it, list it, continue.
 Every prompt lives in docs/prompts/ with an ID (see docs/prompts/README.md). Decisions are cited by full ID (e.g. P01b-D5); requirement clarifications by CL-xx. Update docs/PROGRESS.md and docs/prompts/README.md before writing the report.
+
+Before printing the report, save it as docs/reports/<prompt ID>-<YYYY-MM-DD>.md (add -2, -3… for more sessions of the same prompt on one day) and commit it with the session's other changes, so any machine can read it after git pull (P04b-D10).
