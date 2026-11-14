@@ -12,7 +12,7 @@ last_updated: 2026-11-14
 
 ## Current phase
 
-Phase 1 — the documentation baseline and the code skeleton are done (steps 1, 1b, 1c, 1d, 2a). BD-00, BD-03, DD-00, DD-03 and ADR-0004 are Approved and merged (PR #6). PO-01 introduces the PO / TL / Dev operating model and DD-00, DD-03 rev 3 (PR #7, in review). Next step: P05 (create issues from DD-00 and DD-03), run or delegated by the TL.
+Phase 1 — the documentation baseline and the code skeleton are done (steps 1, 1b, 1c, 1d, 2a). BD-00, BD-03, DD-00, DD-03 and ADR-0004 are Approved and merged (PR #6). PO-01 introduced the PO / TL / Dev operating model and DD-00, DD-03 rev 3 (PR #7, merged). PO-02 adds the CLI UI spec (`docs/product/ui-spec.md`) and CL-07…CL-10; PO-02b approves it with PO decisions UI-D1…UI-D10 (PR #8, in review). Next step: P05 run by the TL (PO-02-N4): DD-00 and DD-03 rev 4, then issues, then P06.
 
 ## Scope
 
@@ -37,7 +37,9 @@ From `BD-00-overview.md` section 10 (P01c-D4):
 | 2c Review BD-00 and BD-03; write DD-00, DD-03 and ADR-0004 | Advisor + Danny | Done | P04 decisions, CL-05, CL-06 | 2026-11-13 |
 | 2d Approve BD-00, BD-03; add DD-00, DD-03, ADR-0004 (P04) | Agent | Done | [PR #6](https://github.com/duong2604/githive/pull/6) (merged) | 2026-11-13 |
 | 2d-b Apply P04 review: BD/DD rev 2, saved reports (P04b) | Agent | Done | [PR #6](https://github.com/duong2604/githive/pull/6) (merged) | 2026-11-13 |
-| PO-01 PO/TL/Dev operating model, handoff rules, DD-00 and DD-03 rev 3 | TL | In review | [PR #7](https://github.com/duong2604/githive/pull/7) | 2026-11-14 |
+| PO-01 PO/TL/Dev operating model, handoff rules, DD-00 and DD-03 rev 3 | TL | Done | [PR #7](https://github.com/duong2604/githive/pull/7) (merged) | 2026-11-14 |
+| PO-02 CLI UI spec, CL-07…CL-10, technical assessment | TL | In review | [PR #8](https://github.com/duong2604/githive/pull/8) | 2026-11-14 |
+| PO-02b UI spec Approved (UI-D1…UI-D10); BD-00 overview rev 4 | TL | In review | [PR #8](https://github.com/duong2604/githive/pull/8) | 2026-11-14 |
 | 3 Issues + implementation for DD-00, DD-03 | TL + Dev | Not started | | |
 
 Prompts for each step: [`docs/prompts/README.md`](prompts/README.md) (one prompt per session).
@@ -77,3 +79,6 @@ Prompts for each step: [`docs/prompts/README.md`](prompts/README.md) (one prompt
 | 2026-11-13 | P04b: BD-00, BD-03, DD-00, DD-03 rev 2 committed verbatim (P04b-D1…D6); README `sync <targets...>` (D7); CLAUDE.md §5 lock scope adds `git config --local` (D8); PR #6 body updated (D9); session reports saved in `docs/reports/`, CLAUDE.md §13 and docs-check rule (g) (D10); P05 plans five issues and prompts P06…P10 (D11) | [#6](https://github.com/duong2604/githive/pull/6) | Windows 11 (Git Bash, Go 1.26.5) |
 | 2026-11-13 | PR #6 merged into main (ab39994). Steps 2d and 2d-b marked Done | — | — |
 | 2026-11-14 | PO-01: discarded three uncommitted hand-copied files on `main` (DD-00, DD-03, P05; 62 insertions, 12 deletions) with `git restore`, per R1; their DD content re-applied section by section as DD-00, DD-03 rev 3 (PO-01-D1…D6). CLAUDE.md §1, §13–§15 (roles, working agreement, handoff); `docs/templates/HANDOFF-template.md`, `docs/handoff/TL.md`; docs-check accepts PO prompts/reports, FEAT-DD reports, `docs/product/`, rule (h) for `docs/handoff/` | [#7](https://github.com/duong2604/githive/pull/7) | Windows 11 (Git Bash, Go 1.26.5) |
+| 2026-11-14 | PR #7 merged into main (563cf09). Step PO-01 marked Done | — | — |
+| 2026-11-14 | PO-02: `docs/product/ui-spec.md` added (PO text, Markdown structure restored from the paste, wording unchanged); CLAUDE.md §3 references it; CL-07…CL-10; technical assessment of the spec in `docs/reports/PO-02-2026-11-14.md` | [#8](https://github.com/duong2604/githive/pull/8) | Windows 11 (Git Bash, Go 1.26.5) |
+| 2026-11-14 | PO-02b: UI spec Approved with PO decisions UI-D1…UI-D10 (§19, revision history); BD-00 overview rev 4 (project list columns, illustrative examples, retire size, v1 release channels); CLAUDE.md §4 and README: `init` no longer lists sync strategy (UI-D8) | [#8](https://github.com/duong2604/githive/pull/8) | Windows 11 (Git Bash, Go 1.26.5) |

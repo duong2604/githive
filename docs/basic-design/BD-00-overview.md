@@ -5,7 +5,7 @@ status: Approved
 req: [REQ-01, REQ-02, REQ-03, REQ-04, REQ-05, REQ-06, REQ-07, REQ-08, NFR-01, NFR-02, NFR-03, NFR-04, NFR-05]
 depends_on: []
 owner: Danny (duong2604)
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # GitHive — Basic Design tổng thể
@@ -258,7 +258,7 @@ Mọi lệnh có `--json` và `--yes`. Lệnh nhận task theo cú pháp `projec
 | `githive init` | | REQ-01, REQ-02, NFR-04, NFR-05 | Wizard thiết lập projects root, worktrees root, prefix, chiến lược sync. Chạy lại để sửa |
 | `githive config get/set <key>` | | NFR-04 | Xem và sửa config toàn cục mà không phải mở file |
 | `githive project add <path>` | `hive add` | REQ-03 | Đăng ký dự án nằm ngoài projects root. Repo trong projects root được tự phát hiện |
-| `githive project list` | `hive list` | REQ-08 | Bảng gồm tên dự án, base branch (hoặc `NULL`), số worktree, remote |
+| `githive project list` | `hive list` | REQ-08 | Bảng gồm tên dự án, base branch (hoặc `NULL`), số task, đường dẫn (UI spec §9) |
 | `githive project config <p> --base dev [--prefix feat/] [--sync merge]` | `hive config` | REQ-03, REQ-08, NFR-03 | Đặt cấu hình theo dự án. Không truyền `--base` thì tool gợi ý từ `origin/HEAD` và các nhánh `dev`/`develop`/`developer` có trên remote |
 | `githive spawn <project@task> [--base x] [--branch <tên đầy đủ>] [--no-hooks]` | `new`, `create` | REQ-04, NFR-02, CL-02 | Fetch base, tạo worktree và nhánh `<prefix><task>`, chép file, chạy hook, in đường dẫn |
 | `githive spawn <project@task> --from-remote <branch>` | | — | Mở worktree cho một nhánh đã có trên remote (ví dụ để review MR của người khác) |
@@ -283,6 +283,8 @@ Mọi lệnh có `--json` và `--yes`. Lệnh nhận task theo cú pháp `projec
 | 5 | Hết thời gian chờ khóa |
 
 Từ v0.1.0, exit code và schema của `--json` được coi là API công khai: thay đổi phải được Danny duyệt.
+
+Màn hình, bảng và thông báo cụ thể theo `docs/product/ui-spec.md`; các ví dụ output trong tài liệu này chỉ để minh họa.
 
 Ví dụ output của `githive swarm 'kirindo@*'`:
 
@@ -375,7 +377,7 @@ Về lo ngại "worktree có nhiều commit có thể gây xung đột":
 | Dùng cả git của WSL và git của Windows trên cùng một repo | Cao | `doctor` cảnh báo; tài liệu ghi rõ "mỗi repo chỉ dùng git của một phía" |
 | Xóa nhầm worktree còn việc dở | Cao | Kiểm tra theo CL-03, hiện bảng để xác nhận, chỉ bỏ qua khi có `--force` |
 | Windows không xóa được thư mục vì IDE hoặc process đang giữ file | Trung bình | Báo rõ file nào đang bị giữ, cho chạy lại; `prune` dọn phần metadata |
-| Tốn dung lượng (`node_modules`, `bin/obj` nhân với số worktree) | Trung bình | `swarm --size`, `retire --stale`; v2 cân nhắc dùng chung pnpm store |
+| Tốn dung lượng (`node_modules`, `bin/obj` nhân với số worktree) | Trung bình | `retire` hiện dung lượng sẽ giải phóng (CL-08), `retire --stale` (v1); v2 cân nhắc dùng chung pnpm store |
 | Claude Code `-w` hoặc Worktrunk bổ sung tính năng trùng với GitHive | Thấp | Giữ trọng tâm vào năm điểm khác biệt ở mục 2 |
 
 ### Roadmap
@@ -383,7 +385,7 @@ Về lo ngại "worktree có nhiều commit có thể gây xung đột":
 | Giai đoạn | Phạm vi |
 | --- | --- |
 | MVP | `init`, `config`, `project add/list/config`, `spawn` (gồm `copy_files` và `postCreate`), `swarm`, `inspect`, `retire <targets>` với kiểm tra an toàn theo CL-03, `path`, `doctor` bản tối thiểu, `--json` và exit code, khóa theo repo, cấu hình hai tầng |
-| v1 | `sync` có dự đoán conflict, `retire --merged/--stale/-i`, nhận diện nhánh đã squash merge, `shell-init`, phát hành bằng GoReleaser kèm Scoop/Homebrew và alias `git-hive` |
+| v1 | `sync` có dự đoán conflict, `retire --merged/--stale/-i`, nhận diện nhánh đã squash merge, `shell-init`, phát hành bằng GoReleaser kèm winget, Scoop, Homebrew, script cài đặt và alias `git-hive` |
 | v2 | API của forge (trạng thái MR, tạo MR), `--run claude`, đánh dấu worktree đang bận, cấp cổng theo worktree, `.githive.toml` dùng chung cho team, `agent-rules`, dashboard TUI |
 
 Phạm vi MVP ở đây khớp với danh mục BD trong [README.md](README.md). Thứ tự làm cụ thể theo `docs/PROGRESS.md`.
@@ -404,6 +406,7 @@ Phạm vi MVP ở đây khớp với danh mục BD trong [README.md](README.md).
 | 2026-11-12 | Bản đầu, tên tạm `wtx` (viết trên claude.ai, export sang Markdown ở P01) |
 | 2026-11-13 | Bản 2 (P01c): đổi tên thành GitHive và các lệnh spawn/swarm/inspect/retire, cú pháp `project@task`, `project add` và `extra_projects`, thêm CL-01…04, thêm Worktrunk vào phần định vị, vẽ lại sơ đồ bằng Mermaid, đổi tham chiếu requirement sang mã REQ, cập nhật phạm vi MVP/v1/v2 và câu hỏi mở |
 | 2026-11-13 | Bản 3 (P03): bỏ `-p/--project` (P03-D1); `swarm` nhận `'project@*'` hoặc `--all` (ADR-0003); gõ `githive` không tham số in help (P01d-D3) |
+| 2026-11-14 | Bản 4 (PO-02b): khớp với UI spec — project list, dung lượng ở retire, kênh phát hành v1 |
 
 ### Nguồn
 
